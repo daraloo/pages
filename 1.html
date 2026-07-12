@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>آیین نامه مسابقات دوومیدانی NICICO 1405</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/Vazirmatn-font-face.css" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family: Vazirmatn;
+            background:#ece8e4;
+            display:flex;
+            justify-content:center;
+            padding:40px;
+        }
+
+        .page{
+
+            width:210mm;
+            min-height:297mm;
+
+            background:white;
+
+            position:relative;
+
+            overflow:hidden;
+
+            box-shadow:
+            0 20px 70px rgba(0,0,0,.18);
+
+        }
+
+        /* واترمارک */
+
+        .page::after{
+
+            content:"";
+
+            position:absolute;
+
+            inset:0;
+
+            background:url("file/images/logo.png") center no-repeat;
+
+            background-size:430px;
+
+            opacity:.035;
+
+            pointer-events:none;
+
+        }
+
+        header{
+
+            border-top:10px solid #b87333;
+
+            padding:40px 60px 20px;
+
+            position:relative;
+            z-index:2;
+        }
+
+        header img{
+
+            width:95px;
+            display:block;
+            margin:auto;
+        }
+
+        .company{
+
+            text-align:center;
+
+            margin-top:18px;
+
+            color:#7d5a45;
+
+            font-size:20px;
+
+            font-weight:600;
+
+            letter-spacing:1px;
+
+        }
+
+        .english{
+
+            text-align:center;
+
+            margin-top:10px;
+
+            color:#b87333;
+
+            letter-spacing:10px;
+
+            font-size:18px;
+
+        }
+
+        .line{
+
+            width:120px;
+
+            height:5px;
+
+            background:#b87333;
+
+            margin:45px auto;
+
+            border-radius:20px;
+
+        }
+
+        h1{
+
+            text-align:center;
+
+            font-size:44px;
+
+            color:#5d4037;
+
+            line-height:85px;
+
+            font-weight:900;
+
+        }
+
+        h2{
+
+            text-align:center;
+
+            margin-top:25px;
+
+            color:#b87333;
+
+            font-size:30px;
+
+            font-weight:700;
+
+        }
+
+        .host{
+
+            width:78%;
+
+            margin:65px auto;
+
+            border:2px solid #d6c1ae;
+
+            border-radius:18px;
+
+            padding:28px;
+
+            background:#fcfaf8;
+
+            position:relative;
+            z-index:2;
+        }
+
+        .host table{
+
+            width:100%;
+
+            border-collapse:collapse;
+
+        }
+
+        .host td{
+
+            padding:16px;
+
+            border-bottom:1px solid #eadfd3;
+
+            font-size:18px;
+
+        }
+
+        .host td:first-child{
+
+            width:170px;
+
+            font-weight:bold;
+
+            color:#7a4b2d;
+
+        }
+
+        .host tr:last-child td{
+
+            border:none;
+
+        }
+
+        footer{
+
+            position:absolute;
+
+            bottom:45px;
+
+            right:60px;
+
+            left:60px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            color:#777;
+
+            font-size:14px;
+
+            border-top:1px solid #ddd;
+
+            padding-top:18px;
+
+        }
+
+        .btns{
+
+            margin:30px auto;
+            text-align:center;
+        }
+
+        button{
+
+            background:#b87333;
+
+            color:white;
+
+            border:none;
+
+            font-family:inherit;
+
+            font-size:17px;
+
+            padding:14px 35px;
+
+            border-radius:12px;
+
+            cursor:pointer;
+
+            transition:.3s;
+        }
+
+        button:hover{
+
+            background:#8a5a33;
+        }
+
+        @media print{
+
+            body{
+
+                background:white;
+                padding:0;
+            }
+
+            .page{
+
+                box-shadow:none;
+
+                margin:0;
+
+                width:210mm;
+                height:297mm;
+            }
+
+            .btns{
+
+                display:none;
+            }
+
+            @page{
+
+                size:A4;
+                margin:0;
+            }
+
+        }
+		
+/* جلوگیری از هرگونه اسکرول افقی */
+*{
+    max-width:100%;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<div>
+
+<div class="page">
+
+<header>
+
+<img src="file/images/logo.png">
+
+<div class="company">
+
+شرکت ملی صنایع مس ایران
+
+</div>
+
+<div class="english">
+
+NICICO
+
+</div>
+
+</header>
+
+<div class="line"></div>
+
+<h1>
+
+آیین‌نامه برگزاری<br>
+
+مسابقات دوومیدانی
+
+</h1>
+
+<h2>
+
+جام NICICO 1405
+
+</h2>
+
+<div class="host">
+
+<table>
+
+<tr>
+
+<td>میزبان</td>
+
+<td>مجتمع مس درآلو</td>
+
+</tr>
+
+<tr>
+
+<td>رده سنی</td>
+
+<td>آزاد</td>
+
+</tr>
+
+<tr>
+
+<td>محل برگزاری</td>
+
+<td>
+
+کرمان ـ بلوار جمهوری اسلامی ـ بلوار رضوان
+
+<br>
+
+مجموعه ورزشی امام علی (ع)
+
+<br>
+
+پیست دوومیدانی باهنر
+
+</td>
+
+</tr>
+
+<tr>
+
+
+<td>تاریخ برگزاری</td>
+
+<td>16 و 17 مهر 1405</td>
+
+
+
+</tr>
+
+<tr>
+
+<td>نسخه</td>
+
+<td>1.0</td>
+
+</tr>
+
+</table>
+
+</div>
+
+<footer>
+
+<div>
+
+کمیته برگزاری مسابقات
+
+</div>
+
+<div>
+
+آیین‌نامه رسمی مسابقات دوومیدانی NICICO
+
+</div>
+
+<div>
+
+1405
+
+</div>
+
+</footer>
+
+</div>
+
+<div class="btns">
+
+<button onclick="window.print()">
+
+🖨 ذخیره و چاپ PDF
+
+</button>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

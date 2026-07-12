@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>فصل دوم - ثبت نام</title>
+
+<link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/Vazirmatn-font-face.css" rel="stylesheet">
+
+<style>
+
+:root{
+--copper:#b87333;
+--dark:#5d4037;
+--border:#e7d8ca;
+--bg:#faf8f5;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Vazirmatn;
+background:#ece8e4;
+display:flex;
+justify-content:center;
+padding:40px;
+}
+
+.page{
+
+width:210mm;
+min-height:297mm;
+
+background:white;
+
+position:relative;
+
+box-shadow:0 15px 40px rgba(0,0,0,.18);
+
+overflow:hidden;
+
+}
+
+.page::after{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+background:url("../file/images/logo.png") center no-repeat;
+
+background-size:430px;
+
+opacity:.025;
+
+pointer-events:none;
+
+}
+
+header{
+
+height:78px;
+
+background:linear-gradient(90deg,#b87333,#d59c66);
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:0 35px;
+
+color:white;
+
+position:relative;
+z-index:2;
+
+}
+
+header img{
+
+width:55px;
+
+}
+
+.chapter{
+
+margin:28px auto;
+
+width:90%;
+
+background:#b87333;
+
+color:white;
+
+border-radius:16px;
+
+padding:22px;
+
+text-align:center;
+
+position:relative;
+z-index:2;
+
+}
+
+.chapter h1{
+
+font-size:36px;
+
+margin-bottom:8px;
+
+}
+
+.chapter h2{
+
+font-size:25px;
+
+font-weight:500;
+
+}
+
+.card{
+
+width:90%;
+
+margin:22px auto;
+
+background:var(--bg);
+
+border:1px solid var(--border);
+
+border-radius:18px;
+
+padding:24px;
+
+position:relative;
+z-index:2;
+
+}
+
+.card h3{
+
+color:var(--dark);
+
+border-right:5px solid var(--copper);
+
+padding-right:10px;
+
+margin-bottom:18px;
+
+font-size:22px;
+
+}
+
+.card p{
+
+line-height:2.2;
+
+font-size:16px;
+
+text-align:justify;
+
+color:#444;
+
+}
+
+.note{
+
+margin-top:15px;
+
+padding:14px;
+
+background:#fff6ef;
+
+border-right:4px solid #b87333;
+
+border-radius:10px;
+
+line-height:2;
+
+font-size:15px;
+
+}
+
+ul{
+
+padding-right:25px;
+
+line-height:2.4;
+
+font-size:16px;
+
+color:#444;
+
+}
+
+footer{
+
+position:absolute;
+
+bottom:20px;
+
+left:35px;
+
+right:35px;
+
+display:flex;
+
+justify-content:space-between;
+
+border-top:1px solid #ddd;
+
+padding-top:10px;
+
+font-size:14px;
+
+color:#777;
+
+}
+
+.buttons{
+
+text-align:center;
+
+margin:25px;
+
+}
+
+button{
+
+background:#b87333;
+
+color:white;
+
+border:none;
+
+padding:14px 32px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-family:inherit;
+
+font-size:16px;
+
+}
+
+@media print{
+
+body{
+
+padding:0;
+
+background:white;
+
+}
+
+.page{
+
+box-shadow:none;
+
+}
+
+.buttons{
+
+display:none;
+
+}
+
+@page{
+
+size:A4;
+
+margin:0;
+
+}
+
+}
+
+/* جلوگیری از هرگونه اسکرول افقی */
+*{
+    max-width:100%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div>
+
+<div class="page">
+
+<header>
+
+<img src="file/images/logo2.png">
+
+<div>
+
+آیین‌نامه مسابقات دوومیدانی NICICO 1405
+
+</div>
+
+<div>
+
+صفحه 4
+
+</div>
+
+</header>
+
+<div class="chapter">
+
+<h1>فصل دوم</h1>
+
+<h2>ثبت‌نام و شرایط حضور</h2>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+ماده 4 ـ ثبت‌نام در مسابقات
+
+</h3>
+
+<p>
+
+ثبت‌نام تمامی تیم‌ها و شرکت‌کنندگان صرفاً از طریق سامانه <strong>NICICO Runner</strong> انجام می‌شود و هیچ‌گونه ثبت‌نام خارج از سامانه مورد پذیرش نخواهد بود.
+
+</p>
+
+<div class="note">
+
+ثبت اطلاعات ورزشکاران، مربیان، سرپرستان و عوامل تیم در سامانه NICICO Runner الزامی است.
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+ماده 5 ـ مهلت ثبت‌نام
+
+</h3>
+
+<ul>
+
+<li>آخرین مهلت ثبت‌نام، یک هفته قبل از آغاز مسابقات خواهد بود.</li>
+
+<li>پس از پایان مهلت ثبت‌نام، امکان حذف، اضافه یا جابه‌جایی ورزشکاران وجود نخواهد داشت.</li>
+
+<li>هرگونه تغییر صرفاً با تأیید کمیته برگزاری مسابقات امکان‌پذیر است.</li>
+
+<li>مسئولیت صحت اطلاعات ثبت‌شده بر عهده سرپرست تیم خواهد بود.</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+ماده 6 ـ مدارک مورد نیاز
+
+</h3>
+
+<ul>
+
+<li>ثبت‌نام کامل در سامانه NICICO Runner.</li>
+
+<li>ارائه معرفی‌نامه معتبر از واحد یا مجتمع مربوطه.</li>
+
+<li>ارائه کارت شناسایی معتبر.</li>
+
+<li>داشتن بیمه ورزشی معتبر در زمان برگزاری مسابقات الزامی است.</li>
+
+<li>ارائه مدارک مورد نیاز اعلامی از سوی کمیته برگزاری.</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+تبصره‌های اجرایی
+
+</h3>
+
+<ul>
+
+<li>ثبت‌نام در مسابقات به منزله پذیرش کامل مفاد این آیین‌نامه است.</li>
+
+<li>در صورت نقص مدارک، کمیته برگزاری مجاز به جلوگیری از حضور ورزشکار خواهد بود.</li>
+
+<li>کلیه مکاتبات رسمی از طریق سرپرست تیم انجام خواهد شد.</li>
+
+</ul>
+
+</div>
+
+<footer>
+
+<div>
+
+جام NICICO 1405
+
+</div>
+
+<div>
+
+صفحه 4
+
+</div>
+
+<div>
+
+کمیته برگزاری مسابقات
+
+</div>
+
+</footer>
+
+</div>
+
+<div class="buttons">
+
+<button onclick="window.print()">
+
+🖨 ذخیره به صورت PDF
+
+</button>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

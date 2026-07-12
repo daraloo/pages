@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>پیوست شماره ۱ - برنامه زمان‌بندی مسابقات</title>
+
+<link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/Vazirmatn-font-face.css" rel="stylesheet">
+
+<style>
+
+:root{
+--copper:#b87333;
+--dark:#5d4037;
+--border:#e7d8ca;
+--bg:#faf8f5;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Vazirmatn;
+background:#ece8e4;
+display:flex;
+justify-content:center;
+padding:40px;
+}
+
+.page{
+width:210mm;
+min-height:297mm;
+background:#fff;
+position:relative;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,.18);
+}
+
+.page::after{
+content:"";
+position:absolute;
+inset:0;
+background:url("../file/images/logo.png") center no-repeat;
+background-size:430px;
+opacity:.025;
+pointer-events:none;
+}
+
+header{
+height:78px;
+background:linear-gradient(90deg,#b87333,#d59c66);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 35px;
+color:#fff;
+position:relative;
+z-index:2;
+}
+
+header img{
+width:55px;
+}
+
+.chapter{
+width:90%;
+margin:28px auto;
+background:#b87333;
+color:#fff;
+border-radius:16px;
+padding:22px;
+text-align:center;
+position:relative;
+z-index:2;
+}
+
+.chapter h1{
+font-size:34px;
+margin-bottom:8px;
+}
+
+.chapter h2{
+font-size:24px;
+font-weight:500;
+}
+
+.card{
+width:90%;
+margin:20px auto;
+background:var(--bg);
+border:1px solid var(--border);
+border-radius:18px;
+padding:22px;
+position:relative;
+z-index:2;
+}
+
+.card h3{
+font-size:21px;
+color:var(--dark);
+border-right:5px solid var(--copper);
+padding-right:10px;
+margin-bottom:18px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+font-size:15px;
+}
+
+th{
+background:#b87333;
+color:#fff;
+padding:12px;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #e5ddd5;
+text-align:center;
+}
+
+tr:nth-child(even){
+background:#fffdfb;
+}
+
+.note{
+margin-top:18px;
+padding:15px;
+background:#fff6ef;
+border-right:4px solid var(--copper);
+border-radius:10px;
+line-height:2;
+font-size:15px;
+color:#444;
+}
+
+footer{
+position:absolute;
+bottom:20px;
+left:35px;
+right:35px;
+display:flex;
+justify-content:space-between;
+border-top:1px solid #ddd;
+padding-top:10px;
+font-size:14px;
+color:#777;
+}
+
+.buttons{
+text-align:center;
+margin:25px;
+}
+
+button{
+background:#b87333;
+color:#fff;
+border:none;
+padding:14px 32px;
+border-radius:10px;
+cursor:pointer;
+font-family:inherit;
+font-size:16px;
+}
+
+@media print{
+
+body{
+padding:0;
+background:#fff;
+}
+
+.page{
+box-shadow:none;
+}
+
+.buttons{
+display:none;
+}
+
+@page{
+size:A4;
+margin:0;
+}
+
+}
+
+
+/* جلوگیری از هرگونه اسکرول افقی */
+*{
+    max-width:100%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div>
+
+<div class="page">
+
+<header>
+
+<img src="file/images/logo2.png">
+
+<div>
+
+آیین‌نامه مسابقات دوومیدانی NICICO 1405
+
+</div>
+
+<div>
+
+صفحه 11
+
+</div>
+
+</header>
+
+<div class="chapter">
+
+<h1>پیوست شماره ۱</h1>
+
+<h2>برنامه زمان‌بندی و اطلاعات اجرایی مسابقات</h2>
+
+</div>
+
+<div class="card">
+
+<h3>
+
+جدول شماره ۱ - برنامه زمانی مسابقات
+
+</h3>
+
+<table>
+
+<tr>
+
+<th>ساعت</th>
+
+<th>ماده مسابقه</th>
+
+<th>نوع</th>
+
+</tr>
+
+<tr>
+
+<td>08:30</td>
+
+<td>5000 متر</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>09:30</td>
+
+<td>100 متر</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>10:30</td>
+
+<td>پرتاب وزنه</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>11:30</td>
+
+<td>پرش طول</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>15:45</td>
+
+<td>1500 متر</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>16:30</td>
+
+<td>4×100 متر امدادی</td>
+
+<td>تیمی</td>
+
+</tr>
+
+<tr>
+
+<td>18:00</td>
+
+<td>مراسم اختتامیه</td>
+
+<td>—</td>
+
+</tr>
+
+</table>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+
+جدول شماره ۲ - مواد مسابقات
+
+</h3>
+
+<table>
+
+<tr>
+
+<th>ردیف</th>
+
+<th>ماده مسابقه</th>
+
+<th>نوع</th>
+
+</tr>
+
+<tr>
+
+<td>1</td>
+
+<td>5000 متر</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>2</td>
+
+<td>100 متر</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>3</td>
+
+<td>پرتاب وزنه</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>4</td>
+
+<td>پرش طول</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>5</td>
+
+<td>1500 متر</td>
+
+<td>انفرادی</td>
+
+</tr>
+
+<tr>
+
+<td>6</td>
+
+<td>4×100 متر امدادی</td>
+
+<td>تیمی</td>
+
+</tr>
+
+</table>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>
+
+تذکرات اجرایی
+
+</h3>
+
+<div class="note">
+
+<ul>
+
+<li>برنامه زمانی فوق در صورت بروز شرایط پیش‌بینی‌نشده، با اعلام کمیته برگزاری قابل تغییر خواهد بود.</li>
+
+<li>ورزشکاران موظف‌اند حداقل ۳۰ دقیقه قبل از شروع ماده مسابقه در محل فراخوان (Call Room) حضور داشته باشند.</li>
+
+<li>عدم حضور به‌موقع به منزله انصراف از آن ماده خواهد بود.</li>
+
+<li>تمامی نتایج مسابقات پس از تأیید هیئت داوران، قطعی و رسمی اعلام می‌شود.</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<footer>
+
+<div>
+
+جام NICICO 1405
+
+</div>
+
+<div>
+
+صفحه 11
+
+</div>
+
+<div>
+
+کمیته برگزاری مسابقات
+
+</div>
+
+</footer>
+
+</div>
+
+<div class="buttons">
+
+<button onclick="window.print()">
+
+🖨 ذخیره به صورت PDF
+
+</button>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

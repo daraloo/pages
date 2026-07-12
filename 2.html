@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>مشخصات آیین‌نامه</title>
+
+<link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/Vazirmatn-font-face.css" rel="stylesheet">
+
+<style>
+
+:root{
+
+--primary:#b87333;
+--primary-dark:#8b5e3c;
+--light:#faf8f6;
+--border:#e5d7ca;
+--text:#4d3b32;
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+font-family:Vazirmatn;
+background:#ece8e4;
+padding:40px;
+display:flex;
+justify-content:center;
+
+}
+
+.page{
+
+width:210mm;
+min-height:297mm;
+
+background:white;
+
+box-shadow:0 15px 45px rgba(0,0,0,.18);
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.page::after{
+
+content:"";
+
+position:absolute;
+inset:0;
+
+background:url("../file/images/logo.png") center center no-repeat;
+
+background-size:450px;
+
+opacity:.025;
+
+pointer-events:none;
+
+}
+
+header{
+
+height:90px;
+
+background:linear-gradient(90deg,#b87333,#d49a63);
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 40px;
+
+color:white;
+
+position:relative;
+z-index:2;
+
+}
+
+.logo{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+}
+
+.logo img{
+
+width:58px;
+
+}
+
+.logo div{
+
+font-size:18px;
+font-weight:bold;
+
+}
+
+.title{
+
+font-size:22px;
+font-weight:700;
+
+}
+
+.version{
+
+font-size:15px;
+
+}
+
+.content{
+
+padding:40px 45px;
+position:relative;
+z-index:2;
+
+}
+
+.card{
+
+background:var(--light);
+
+border:1px solid var(--border);
+
+border-radius:18px;
+
+padding:25px;
+
+margin-bottom:35px;
+
+box-shadow:0 6px 20px rgba(0,0,0,.05);
+
+}
+
+.card h2{
+
+color:var(--primary-dark);
+
+margin-bottom:20px;
+
+font-size:24px;
+
+}
+
+.info{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+.info td{
+
+padding:15px;
+
+border-bottom:1px solid #e6ddd4;
+
+font-size:16px;
+
+}
+
+.info td:first-child{
+
+width:180px;
+
+font-weight:bold;
+
+color:#7a5539;
+
+}
+
+.info tr:last-child td{
+
+border:none;
+
+}
+
+.toc{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+.toc th{
+
+background:var(--primary);
+
+color:white;
+
+padding:14px;
+
+font-size:17px;
+
+}
+
+.toc td{
+
+padding:14px;
+
+border-bottom:1px solid #eee;
+
+font-size:16px;
+
+}
+
+.toc tr:nth-child(even){
+
+background:#fcfbfa;
+
+}
+
+.toc td:last-child{
+
+width:80px;
+text-align:center;
+
+font-weight:bold;
+
+color:var(--primary);
+
+}
+
+footer{
+
+position:absolute;
+
+bottom:20px;
+
+left:40px;
+
+right:40px;
+
+display:flex;
+
+justify-content:space-between;
+
+border-top:1px solid #ddd;
+
+padding-top:10px;
+
+font-size:14px;
+
+color:#777;
+
+}
+
+.buttons{
+
+text-align:center;
+margin:25px;
+
+}
+
+button{
+
+background:var(--primary);
+
+border:none;
+
+color:white;
+
+font-family:inherit;
+
+padding:14px 34px;
+
+font-size:16px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:var(--primary-dark);
+
+}
+
+@media print{
+
+body{
+
+padding:0;
+background:white;
+
+}
+
+.page{
+
+box-shadow:none;
+
+}
+
+.buttons{
+
+display:none;
+
+}
+
+@page{
+
+size:A4;
+margin:0;
+
+}
+
+}
+
+/* جلوگیری از هرگونه اسکرول افقی */
+*{
+    max-width:100%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div>
+
+<div class="page">
+
+<header>
+
+<div class="logo">
+
+<img src="file/images/logo2.png">
+
+<div>
+
+شرکت ملی صنایع مس ایران
+
+</div>
+
+</div>
+
+<div class="title">
+
+آیین‌نامه مسابقات دوومیدانی
+
+</div>
+
+<div class="version">
+
+نسخه 1.0
+
+</div>
+
+</header>
+
+<div class="content">
+
+<div class="card">
+
+<h2>
+
+مشخصات آیین‌نامه
+
+</h2>
+
+<table class="info">
+
+<tr>
+
+<td>عنوان</td>
+
+<td>آیین‌نامه برگزاری مسابقات دوومیدانی جام NICICO 1405</td>
+
+</tr>
+
+<tr>
+
+<td>برگزارکننده</td>
+
+<td>واحد تربیت بدنی مجتمع مس درآلو با همکاری هیات دومیدانی استان کرمان</td>
+
+</tr>
+
+<tr>
+
+<td>میزبان</td>
+
+<td>شرکت ملی صنایع مس ایران</td>
+
+</tr>
+
+<tr>
+
+<td>رده سنی</td>
+
+<td>آزاد</td>
+
+</tr>
+
+<tr>
+
+<td>مرجع قوانین</td>
+
+<td>آخرین قوانین و مقررات فدراسیون دوومیدانی جمهوری اسلامی ایران</td>
+
+</tr>
+
+<tr>
+
+<td>نسخه آیین‌نامه</td>
+
+<td>1.0</td>
+
+</tr>
+
+<tr>
+
+
+
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+فهرست مطالب
+
+</h2>
+
+<table class="toc">
+
+<tr>
+
+<th>عنوان فصل</th>
+
+<th>صفحه</th>
+
+</tr>
+
+<tr>
+
+<td>فصل اول — کلیات</td>
+
+<td>3</td>
+
+</tr>
+
+<tr>
+
+<td>فصل دوم — ثبت‌نام و شرایط حضور</td>
+
+<td>4</td>
+
+</tr>
+
+<tr>
+
+<td>فصل سوم — شرایط شرکت‌کنندگان</td>
+
+<td>5</td>
+
+</tr>
+
+<tr>
+
+<td>فصل چهارم — مقررات فنی مسابقات</td>
+
+<td>6</td>
+
+</tr>
+
+<tr>
+
+<td>فصل پنجم — داوری و امتیازدهی</td>
+
+<td>7</td>
+
+</tr>
+
+<tr>
+
+<td>فصل ششم — اعتراضات</td>
+
+<td>8</td>
+
+</tr>
+
+<tr>
+
+<td>فصل هفتم — تخلفات و مقررات انضباطی</td>
+
+<td>9</td>
+
+</tr>
+
+<tr>
+
+<td>فصل هشتم — اختتامیه و احکام پایانی</td>
+
+<td>10</td>
+
+</tr>
+
+<tr>
+
+<td>پیوست‌ها</td>
+
+<td>11</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+<footer>
+
+<div>
+
+جام NICICO 1405
+
+</div>
+
+<div>
+
+صفحه 2
+
+</div>
+
+<div>
+
+کمیته برگزاری مسابقات
+
+</div>
+
+</footer>
+
+</div>
+
+<div class="buttons">
+
+<button onclick="window.print()">
+
+🖨 ذخیره به صورت PDF
+
+</button>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
