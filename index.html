@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Viewer</title>
+<link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Vazirmatn;background:#ddd}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+nav{position:fixed;top:0;right:-270px;width:260px;height:100%;background:#fff;overflow:auto;
+transition:.3s;box-shadow:-5px 0 20px rgba(0,0,0,.2);z-index:1000}
+nav.show{right:0}
+.menu{position:fixed;top:20px;right:20px;width:54px;height:54px;border:none;border-radius:50%;
+background:#b87333;color:#fff;font-size:26px;cursor:pointer;z-index:1100}
+nav button{display:block;width:100%;padding:15px;border:0;border-bottom:1px solid #eee;
+background:#fff;text-align:right;font:inherit;cursor:pointer}
+nav button:hover,nav button.active{background:#b87333;color:#fff}
+</style>
+</head>
+<body>
+<button class="menu" onclick="nav.classList.toggle('show')">☰</button>
+<nav id="nav"></nav>
+<iframe id="viewer" src="1.html"></iframe>
+<script>
+const nav=document.getElementById('nav');
+const viewer=document.getElementById('viewer');
+const titles=[
+'جلد','فهرست','فصل اول','فصل دوم','فصل سوم','فصل چهارم',
+'فصل پنجم','فصل ششم','فصل هفتم','فصل هشتم',
+'پیوست شماره ۱','پیوست شماره ۲','پشت جلد'
+];
+for(let i=1;i<=13;i++){
+ let b=document.createElement('button');
+ b.textContent='📄 '+titles[i-1];
+ if(i===1)b.className='active';
+ b.onclick=()=>{
+   viewer.src=i+'.html';
+   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+   b.classList.add('active');
+   nav.classList.remove('show');
+ };
+ nav.appendChild(b);
+}
+</script>
+</body>
+</html>
