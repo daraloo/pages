@@ -1,0 +1,2961 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>DARALOO SMART SOCIAL ATLAS</title>
+
+  <!-- =========================
+       Leaflet
+  ========================== -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- =========================
+       Chart.js
+       فقط برای Render داده آماده Backend
+  ========================== -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* =========================================================
+       ROOT
+    ========================================================== */
+
+    :root {
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --border: #e4e8ee;
+      --text: #17202a;
+      --muted: #718096;
+      --primary: #2563eb;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --info: #0891b2;
+      --sidebar: #111827;
+      --sidebar-hover: #1f2937;
+      --shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family:
+        Tahoma,
+        Arial,
+        sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    /* =========================================================
+       APP
+    ========================================================== */
+
+    #app {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* =========================================================
+       SIDEBAR
+    ========================================================== */
+
+    .sidebar {
+      width: 270px;
+      min-width: 270px;
+      background: var(--sidebar);
+      color: #fff;
+      min-height: 100vh;
+      padding: 18px 14px;
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 8px 22px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 16px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .brand-subtitle {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .nav-title {
+      color: #6b7280;
+      font-size: 10px;
+      margin: 18px 8px 8px;
+    }
+
+    .nav-item {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #d1d5db;
+      text-align: right;
+      padding: 11px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: .15s;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: var(--sidebar-hover);
+      color: #fff;
+    }
+
+    /* =========================================================
+       MAIN
+    ========================================================== */
+
+    .main {
+      width: calc(100% - 270px);
+      margin-right: 270px;
+      min-height: 100vh;
+    }
+
+    /* =========================================================
+       TOPBAR
+    ========================================================== */
+
+    .topbar {
+      height: 70px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .topbar-subtitle {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .status-dot.error {
+      background: var(--danger);
+    }
+
+    .refresh-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 8px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .refresh-btn:hover {
+      background: #f8fafc;
+    }
+
+    /* =========================================================
+       CONTENT
+    ========================================================== */
+
+    .content {
+      padding: 22px;
+    }
+
+    /* =========================================================
+       FILTERS
+    ========================================================== */
+
+    .filters {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .filters-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .filters-title {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .filter-field label {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .filter-field select,
+    .filter-field input {
+      width: 100%;
+      height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      padding: 0 10px;
+      outline: none;
+      font-size: 12px;
+    }
+
+    .filter-field select:focus,
+    .filter-field input:focus {
+      border-color: var(--primary);
+    }
+
+    /* =========================================================
+       KPI
+    ========================================================== */
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-label {
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 25px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .kpi-description {
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* =========================================================
+       GRID
+    ========================================================== */
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    /* =========================================================
+       MAP
+    ========================================================== */
+
+    #map {
+      width: 100%;
+      height: 520px;
+    }
+
+    .map-card {
+      min-height: 520px;
+    }
+
+    /* =========================================================
+       LAYERS
+    ========================================================== */
+
+    .layers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .layer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 9px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 11px;
+    }
+
+    .layer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .layer-toggle {
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       CHART
+    ========================================================== */
+
+    .chart-container {
+      height: 300px;
+      position: relative;
+    }
+
+    /* =========================================================
+       PROJECT TABLE
+    ========================================================== */
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th,
+    td {
+      padding: 11px 9px;
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 800;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 9px;
+    }
+
+    .status-completed {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-progress {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .status-delayed {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .status-stopped {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-planned {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    /* =========================================================
+       ALERTS
+    ========================================================== */
+
+    .alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .alert-item {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 11px;
+    }
+
+    .alert-title {
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .alert-description {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* =========================================================
+       LOADING
+    ========================================================== */
+
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,.75);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .loading-box {
+      background: #fff;
+      padding: 25px 35px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #e5e7eb;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: auto auto 12px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================================================
+       ERROR
+    ========================================================== */
+
+    .error-box {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 12px 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 12px;
+    }
+
+    .error-box.active {
+      display: block;
+    }
+
+    /* =========================================================
+       EMPTY
+    ========================================================== */
+
+    .empty-state {
+      padding: 35px 15px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================== */
+
+    @media (max-width: 1100px) {
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        width: 230px;
+        min-width: 230px;
+      }
+
+      .main {
+        width: calc(100% - 230px);
+        margin-right: 230px;
+      }
+    }
+
+    @media (max-width: 800px) {
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+      }
+
+      .main {
+        width: 100%;
+        margin-right: 0;
+      }
+
+      #app {
+        display: block;
+      }
+
+      .topbar {
+        position: relative;
+      }
+
+      .content {
+        padding: 12px;
+      }
+
+      #map {
+        height: 420px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <!-- =======================================================
+       SIDEBAR
+  ======================================================== -->
+
+  <aside class="sidebar">
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        DS
+      </div>
+
+      <div>
+        <div class="brand-title">
+          DARALOO SMART
+        </div>
+
+        <div class="brand-subtitle">
+          SOCIAL ATLAS
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nav-title">
+      سامانه
+    </div>
+
+    <button
+      class="nav-item active"
+      data-view="dashboard"
+    >
+      داشبورد مدیریتی
+    </button>
+
+    <button
+      class="nav-item"
+      data-view="map"
+    >
+      اطلس GIS
+    </button>
+
+    <button
+      class="nav-item"
+      data-view="villages"
+    >
+      روستاها
+    </button>
+
+    <button
+      class="nav-item"
+      data-view="projects"
+    >
+      پروژه‌ها
+    </button>
+
+    <button
+      class="nav-item"
+      data-view="reports"
+    >
+      گزارش‌ها
+    </button>
+
+  </aside>
+
+
+  <!-- =======================================================
+       MAIN
+  ======================================================== -->
+
+  <main class="main">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+      <div>
+
+        <div class="topbar-title">
+          DARALOO SMART SOCIAL ATLAS
+        </div>
+
+        <div class="topbar-subtitle">
+          Regional Social Intelligence & GIS Platform
+        </div>
+
+      </div>
+
+      <div class="topbar-actions">
+
+        <div class="status-indicator">
+
+          <span
+            id="connectionDot"
+            class="status-dot"
+          ></span>
+
+          <span id="connectionText">
+            در حال اتصال...
+          </span>
+
+        </div>
+
+        <button
+          id="refreshButton"
+          class="refresh-btn"
+        >
+          بروزرسانی
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <section class="content">
+
+      <!-- ERROR -->
+
+      <div
+        id="errorBox"
+        class="error-box"
+      ></div>
+
+
+      <!-- =====================================================
+           FILTERS
+      ====================================================== -->
+
+      <section class="filters">
+
+        <div class="filters-header">
+
+          <div class="filters-title">
+            فیلتر اطلاعات
+          </div>
+
+        </div>
+
+        <div class="filters-grid">
+
+          <div class="filter-field">
+
+            <label>
+              شهرستان
+            </label>
+
+            <select id="filterDistrict">
+              <option value="">
+                همه
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="filter-field">
+
+            <label>
+              دهستان
+            </label>
+
+            <select id="filterDehestan">
+              <option value="">
+                همه
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="filter-field">
+
+            <label>
+              وضعیت پروژه
+            </label>
+
+            <select id="filterStatus">
+              <option value="">
+                همه
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="filter-field">
+
+            <label>
+              نوع پروژه
+            </label>
+
+            <select id="filterProjectType">
+              <option value="">
+                همه
+              </option>
+            </select>
+
+          </div>
+
+
+          <div class="filter-field">
+
+            <label>
+              جستجو
+            </label>
+
+            <input
+              id="filterSearch"
+              type="text"
+              placeholder="نام یا شناسه..."
+            >
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           KPI
+      ====================================================== -->
+
+      <section
+        id="kpiContainer"
+        class="kpi-grid"
+      >
+      </section>
+
+
+      <!-- =====================================================
+           MAP + LAYERS
+      ====================================================== -->
+
+      <section class="dashboard-grid">
+
+        <div class="card map-card">
+
+          <div class="card-header">
+
+            <div class="card-title">
+              نقشه منطقه
+            </div>
+
+            <div
+              id="mapLastUpdate"
+              style="font-size:10px;color:#718096;"
+            >
+              -
+            </div>
+
+          </div>
+
+          <div id="map"></div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="card-title">
+              لایه‌های نقشه
+            </div>
+
+          </div>
+
+          <div class="card-body">
+
+            <div
+              id="layersContainer"
+              class="layers-list"
+            >
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ANALYTICS
+      ====================================================== -->
+
+      <section class="dashboard-grid">
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="card-title">
+              تحلیل پروژه‌ها
+            </div>
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="chart-container">
+
+              <canvas id="projectChart"></canvas>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div class="card-title">
+              وضعیت منطقه
+            </div>
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="chart-container">
+
+              <canvas id="regionalChart"></canvas>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ALERTS
+      ====================================================== -->
+
+      <section class="card">
+
+        <div class="card-header">
+
+          <div class="card-title">
+            اولویت‌ها و هشدارها
+          </div>
+
+        </div>
+
+        <div class="card-body">
+
+          <div
+            id="alertsContainer"
+            class="alerts"
+          >
+          </div>
+
+        </div>
+
+      </section>
+
+      <br>
+
+
+      <!-- =====================================================
+           PROJECTS
+      ====================================================== -->
+
+      <section class="card">
+
+        <div class="card-header">
+
+          <div class="card-title">
+            پروژه‌های اخیر
+          </div>
+
+        </div>
+
+        <div class="card-body">
+
+          <div class="table-wrapper">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    شناسه
+                  </th>
+
+                  <th>
+                    نام پروژه
+                  </th>
+
+                  <th>
+                    منطقه
+                  </th>
+
+                  <th>
+                    وضعیت
+                  </th>
+
+                  <th>
+                    پیشرفت
+                  </th>
+
+                  <th>
+                    آخرین بروزرسانی
+                  </th>
+
+                </tr>
+
+              </thead>
+
+              <tbody
+                id="projectsTableBody"
+              >
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- =========================================================
+     LOADING
+========================================================== -->
+
+<div
+  id="loadingOverlay"
+  class="loading-overlay"
+>
+
+  <div class="loading-box">
+
+    <div class="spinner"></div>
+
+    <div>
+      در حال دریافت اطلاعات...
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     LEAFLET
+========================================================== -->
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script>
+/* ============================================================
+   DARALOO SMART SOCIAL ATLAS
+   FRONTEND APPLICATION
+
+   IMPORTANT:
+   ---------------------------------------------
+   این فایل هیچ تحلیل مدیریتی انجام نمی‌دهد.
+
+   Backend باید JSON نهایی را تولید کند.
+
+   Frontend فقط:
+   1. Request
+   2. Receive JSON
+   3. Render
+   ============================================================ */
+
+
+/* ============================================================
+   CONFIG
+============================================================ */
+
+const CONFIG = {
+
+  /*
+   * آدرس Web App مربوط به Google Apps Script
+   *
+   * مثال:
+   *
+   * https://script.google.com/macros/s/XXXXXXXXXXXX/exec
+   */
+
+  gasUrl: "https://script.google.com/macros/s/AKfycbyIoSPXveCldX_uivjmH7Y47pWKcRoN5pc8-qR3hRh7a_VHJqPS9XJ-pF6rJkZ9LtjW/exec",
+
+  requestTimeout: 30000,
+
+  /*
+   * 0 = بدون Refresh خودکار
+   *
+   * مثلاً:
+   * 60000 = هر 60 ثانیه
+   */
+
+  refreshInterval: 0
+
+};
+
+
+/* ============================================================
+   APPLICATION STATE
+============================================================ */
+
+const APP = {
+
+  map: null,
+
+  mapLayers: {},
+
+  charts: {
+    project: null,
+    regional: null
+  },
+
+  dashboard: null,
+
+  filters: {
+
+    districtId: "",
+
+    dehestanId: "",
+
+    status: "",
+
+    projectType: "",
+
+    search: ""
+
+  },
+
+  refreshTimer: null
+
+};
+
+
+/* ============================================================
+   DOM
+============================================================ */
+
+const DOM = {
+
+  loading:
+    document.getElementById("loadingOverlay"),
+
+  error:
+    document.getElementById("errorBox"),
+
+  connectionDot:
+    document.getElementById("connectionDot"),
+
+  connectionText:
+    document.getElementById("connectionText"),
+
+  kpi:
+    document.getElementById("kpiContainer"),
+
+  layers:
+    document.getElementById("layersContainer"),
+
+  alerts:
+    document.getElementById("alertsContainer"),
+
+  projects:
+    document.getElementById("projectsTableBody"),
+
+  refresh:
+    document.getElementById("refreshButton"),
+
+  filterDistrict:
+    document.getElementById("filterDistrict"),
+
+  filterDehestan:
+    document.getElementById("filterDehestan"),
+
+  filterStatus:
+    document.getElementById("filterStatus"),
+
+  filterProjectType:
+    document.getElementById("filterProjectType"),
+
+  filterSearch:
+    document.getElementById("filterSearch"),
+
+  mapLastUpdate:
+    document.getElementById("mapLastUpdate")
+
+};
+
+
+/* ============================================================
+   UTILITY
+============================================================ */
+
+function setLoading(active) {
+
+  DOM.loading.classList.toggle(
+    "active",
+    active
+  );
+
+}
+
+
+function showError(message) {
+
+  DOM.error.textContent = message;
+
+  DOM.error.classList.add("active");
+
+  DOM.connectionDot.classList.add("error");
+
+  DOM.connectionText.textContent =
+    "خطا در ارتباط";
+
+}
+
+
+function clearError() {
+
+  DOM.error.textContent = "";
+
+  DOM.error.classList.remove("active");
+
+  DOM.connectionDot.classList.remove("error");
+
+  DOM.connectionText.textContent =
+    "متصل";
+
+}
+
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* ============================================================
+   API CLIENT
+============================================================ */
+
+/*
+ * تمام ارتباط با Backend فقط از اینجا انجام می‌شود.
+ */
+
+async function apiRequest(
+  action,
+  params = {},
+  method = "GET"
+) {
+
+  if (
+    !CONFIG.gasUrl ||
+    CONFIG.gasUrl === "***"
+  ) {
+
+    throw new Error(
+      "CONFIG.gasUrl تنظیم نشده است."
+    );
+
+  }
+
+
+  const controller =
+    new AbortController();
+
+  const timeout =
+    setTimeout(
+      () => controller.abort(),
+      CONFIG.requestTimeout
+    );
+
+
+  try {
+
+    let response;
+
+
+    /* ======================================================
+       GET
+    ======================================================= */
+
+    if (method === "GET") {
+
+      const query =
+        new URLSearchParams();
+
+      query.set(
+        "action",
+        action
+      );
+
+
+      Object.entries(params)
+        .forEach(
+          ([key, value]) => {
+
+            if (
+              value !== null &&
+              value !== undefined &&
+              value !== ""
+            ) {
+
+              query.set(
+                key,
+                value
+              );
+
+            }
+
+          }
+        );
+
+
+      const url =
+        `${CONFIG.gasUrl}?${query.toString()}`;
+
+
+      response =
+        await fetch(
+          url,
+          {
+            method: "GET",
+            signal: controller.signal,
+            cache: "no-store"
+          }
+        );
+
+    }
+
+
+    /* ======================================================
+       POST
+    ======================================================= */
+
+    else {
+
+      response =
+        await fetch(
+          CONFIG.gasUrl,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
+
+            body:
+              JSON.stringify({
+                action,
+                ...params
+              }),
+
+            signal:
+              controller.signal
+          }
+        );
+
+    }
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+
+    }
+
+
+    const json =
+      await response.json();
+
+
+    /*
+     * Backend Contract
+     *
+     * {
+     *   success: true,
+     *   data: {...},
+     *   error: null
+     * }
+     */
+
+    if (
+      json &&
+      json.success === false
+    ) {
+
+      throw new Error(
+        json.error ||
+        "Backend request failed"
+      );
+
+    }
+
+
+    return json;
+
+  }
+
+  catch (error) {
+
+    if (
+      error.name ===
+      "AbortError"
+    ) {
+
+      throw new Error(
+        "زمان درخواست به پایان رسید."
+      );
+
+    }
+
+    throw error;
+
+  }
+
+  finally {
+
+    clearTimeout(timeout);
+
+  }
+
+}
+
+
+/* ============================================================
+   DASHBOARD REQUEST
+============================================================ */
+
+async function loadDashboard() {
+
+  setLoading(true);
+
+  clearError();
+
+
+  try {
+
+    /*
+     * هیچ تحلیلی اینجا انجام نمی‌شود.
+     *
+     * فقط Filterها به Backend ارسال می‌شوند.
+     */
+
+    const params = {
+
+      districtId:
+        APP.filters.districtId,
+
+      dehestanId:
+        APP.filters.dehestanId,
+
+      status:
+        APP.filters.status,
+
+      projectType:
+        APP.filters.projectType,
+
+      search:
+        APP.filters.search
+
+    };
+
+
+    /*
+     * GET
+     *
+     * Backend:
+     *
+     * doGet(e)
+     */
+
+    const response =
+      await apiRequest(
+        "dashboard",
+        params,
+        "GET"
+      );
+
+
+    /*
+     * JSON نهایی Backend
+     */
+
+    APP.dashboard =
+      response.data ||
+      response;
+
+
+    renderDashboard(
+      APP.dashboard
+    );
+
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    showError(
+      error.message ||
+      "خطا در دریافت اطلاعات"
+    );
+
+  }
+
+  finally {
+
+    setLoading(false);
+
+  }
+
+}
+
+
+/* ============================================================
+   RENDER DASHBOARD
+============================================================ */
+
+function renderDashboard(data) {
+
+  if (!data) {
+
+    throw new Error(
+      "داده Dashboard دریافت نشد."
+    );
+
+  }
+
+
+  renderKPIs(
+    data.kpis
+  );
+
+  renderFilters(
+    data.filters
+  );
+
+  renderLayers(
+    data.layers
+  );
+
+  renderMap(
+    data.map
+  );
+
+  renderCharts(
+    data.analytics
+  );
+
+  renderAlerts(
+    data.alerts
+  );
+
+  renderProjects(
+    data.projects
+  );
+
+
+  if (
+    data.meta &&
+    data.meta.updatedAt
+  ) {
+
+    DOM.mapLastUpdate.textContent =
+      data.meta.updatedAt;
+
+  }
+
+}
+
+
+/* ============================================================
+   KPI RENDER
+============================================================ */
+
+/*
+ * Backend باید KPIها را آماده ارسال کند.
+ *
+ * مثال:
+ *
+ * {
+ *   key: "villages",
+ *   label: "تعداد روستاها",
+ *   value: 125,
+ *   description: "..."
+ * }
+ */
+
+function renderKPIs(kpis) {
+
+  DOM.kpi.innerHTML = "";
+
+
+  if (
+    !Array.isArray(kpis) ||
+    !kpis.length
+  ) {
+
+    DOM.kpi.innerHTML =
+      `<div class="card">
+        <div class="empty-state">
+          داده‌ای برای نمایش وجود ندارد.
+        </div>
+      </div>`;
+
+    return;
+
+  }
+
+
+  kpis.forEach(kpi => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "kpi-card";
+
+
+    card.innerHTML = `
+
+      <div class="kpi-label">
+        ${escapeHTML(kpi.label)}
+      </div>
+
+      <div class="kpi-value">
+        ${escapeHTML(kpi.value)}
+      </div>
+
+      ${
+        kpi.description
+        ?
+        `<div class="kpi-description">
+          ${escapeHTML(kpi.description)}
+        </div>`
+        :
+        ""
+      }
+
+    `;
+
+
+    DOM.kpi.appendChild(card);
+
+  });
+
+}
+
+
+/* ============================================================
+   FILTER RENDER
+============================================================ */
+
+/*
+ * Backend باید Optionهای Filter را تولید کند.
+ */
+
+function renderFilters(filters) {
+
+  if (!filters) {
+    return;
+  }
+
+
+  populateSelect(
+    DOM.filterDistrict,
+    filters.districts
+  );
+
+
+  populateSelect(
+    DOM.filterDehestan,
+    filters.dehestans
+  );
+
+
+  populateSelect(
+    DOM.filterStatus,
+    filters.statuses
+  );
+
+
+  populateSelect(
+    DOM.filterProjectType,
+    filters.projectTypes
+  );
+
+}
+
+
+function populateSelect(
+  select,
+  items
+) {
+
+  if (
+    !select ||
+    !Array.isArray(items)
+  ) {
+
+    return;
+
+  }
+
+
+  const current =
+    select.value;
+
+
+  select.innerHTML =
+    `<option value="">
+      همه
+    </option>`;
+
+
+  items.forEach(item => {
+
+    const option =
+      document.createElement("option");
+
+
+    /*
+     * Backend می‌تواند:
+     *
+     * {
+     *   id: "...",
+     *   name: "..."
+     * }
+     */
+
+    option.value =
+      item.id ??
+      item.value ??
+      "";
+
+
+    option.textContent =
+      item.name ??
+      item.label ??
+      item.text ??
+      "";
+
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+
+  if (
+    current &&
+    [...select.options]
+      .some(
+        o => o.value === current
+      )
+  ) {
+
+    select.value = current;
+
+  }
+
+}
+
+
+/* ============================================================
+   LAYER RENDER
+============================================================ */
+
+function renderLayers(layers) {
+
+  DOM.layers.innerHTML = "";
+
+
+  if (
+    !Array.isArray(layers) ||
+    !layers.length
+  ) {
+
+    DOM.layers.innerHTML =
+      `<div class="empty-state">
+        لایه‌ای موجود نیست.
+      </div>`;
+
+    return;
+
+  }
+
+
+  layers.forEach(layer => {
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "layer-row";
+
+
+    row.innerHTML = `
+
+      <div class="layer-left">
+
+        <input
+          class="layer-toggle"
+          type="checkbox"
+          data-layer-id="${escapeHTML(layer.id)}"
+          ${layer.visible !== false ? "checked" : ""}
+        >
+
+        <span>
+          ${escapeHTML(layer.name)}
+        </span>
+
+      </div>
+
+    `;
+
+
+    const checkbox =
+      row.querySelector(
+        ".layer-toggle"
+      );
+
+
+    checkbox.addEventListener(
+      "change",
+      event => {
+
+        toggleMapLayer(
+          layer.id,
+          event.target.checked
+        );
+
+      }
+    );
+
+
+    DOM.layers.appendChild(row);
+
+  });
+
+}
+
+
+/* ============================================================
+   MAP INITIALIZATION
+============================================================ */
+
+function initMap() {
+
+  APP.map =
+    L.map("map", {
+      zoomControl: true
+    });
+
+
+  /*
+   * Base Map
+   */
+
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 19,
+      attribution:
+        "&copy; OpenStreetMap"
+    }
+  ).addTo(
+    APP.map
+  );
+
+
+  /*
+   * مرکز اولیه
+   *
+   * مقدار واقعی می‌تواند توسط Backend
+   * در Dashboard ارسال شود.
+   */
+
+  APP.map.setView(
+    [30, 57],
+    7
+  );
+
+}
+
+
+/* ============================================================
+   MAP RENDER
+============================================================ */
+
+function renderMap(mapData) {
+
+  if (!APP.map) {
+    return;
+  }
+
+
+  if (!mapData) {
+    return;
+  }
+
+
+  /*
+   * پاک‌سازی Layerهای قبلی
+   */
+
+  Object.values(
+    APP.mapLayers
+  ).forEach(
+    layer => {
+
+      if (
+        APP.map.hasLayer(layer)
+      ) {
+
+        APP.map.removeLayer(
+          layer
+        );
+
+      }
+
+    }
+  );
+
+
+  APP.mapLayers = {};
+
+
+  /*
+   * View
+   *
+   * این مختصات از Backend می‌آید.
+   */
+
+  if (
+    mapData.center &&
+    Array.isArray(
+      mapData.center
+    )
+  ) {
+
+    APP.map.setView(
+      mapData.center,
+      mapData.zoom || 8
+    );
+
+  }
+
+
+  /*
+   * Backend باید Featureها را
+   * به شکل GeoJSON ارسال کند.
+   */
+
+  if (
+    Array.isArray(
+      mapData.layers
+    )
+  ) {
+
+    mapData.layers.forEach(
+      layerData => {
+
+        if (
+          !layerData.geojson
+        ) {
+
+          return;
+
+        }
+
+
+        const geoLayer =
+          L.geoJSON(
+            layerData.geojson,
+            {
+
+              onEachFeature:
+                (
+                  feature,
+                  leafletLayer
+                ) => {
+
+                  const popup =
+                    buildFeaturePopup(
+                      feature
+                    );
+
+
+                  if (popup) {
+
+                    leafletLayer.bindPopup(
+                      popup
+                    );
+
+                  }
+
+                }
+
+            }
+          );
+
+
+        APP.mapLayers[
+          layerData.id
+        ] = geoLayer;
+
+
+        if (
+          layerData.visible !== false
+        ) {
+
+          geoLayer.addTo(
+            APP.map
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   FEATURE POPUP
+============================================================ */
+
+function buildFeaturePopup(
+  feature
+) {
+
+  if (
+    !feature ||
+    !feature.properties
+  ) {
+
+    return "";
+
+  }
+
+
+  const p =
+    feature.properties;
+
+
+  /*
+   * اطلاعات Popup باید توسط Backend
+   * آماده شده باشد.
+   *
+   * Frontend فقط Render می‌کند.
+   */
+
+  let html = `
+
+    <div
+      style="
+        min-width:220px;
+        direction:rtl;
+      "
+    >
+
+      <div
+        style="
+          font-weight:800;
+          font-size:14px;
+          margin-bottom:8px;
+        "
+      >
+        ${escapeHTML(
+          p.name || "بدون نام"
+        )}
+      </div>
+
+  `;
+
+
+  if (p.id) {
+
+    html += `
+      <div>
+        شناسه:
+        ${escapeHTML(p.id)}
+      </div>
+    `;
+
+  }
+
+
+  if (p.profileUrl) {
+
+    html += `
+      <br>
+
+      <a
+        href="${escapeHTML(p.profileUrl)}"
+        target="_blank"
+        style="
+          color:#2563eb;
+          text-decoration:none;
+        "
+      >
+        مشاهده شناسنامه کامل
+      </a>
+    `;
+
+  }
+
+
+  html += `
+    </div>
+  `;
+
+
+  return html;
+
+}
+
+
+/* ============================================================
+   LAYER TOGGLE
+============================================================ */
+
+function toggleMapLayer(
+  layerId,
+  visible
+) {
+
+  const layer =
+    APP.mapLayers[
+      layerId
+    ];
+
+
+  if (!layer) {
+    return;
+  }
+
+
+  if (visible) {
+
+    if (
+      !APP.map.hasLayer(
+        layer
+      )
+    ) {
+
+      layer.addTo(
+        APP.map
+      );
+
+    }
+
+  }
+
+  else {
+
+    if (
+      APP.map.hasLayer(
+        layer
+      )
+    ) {
+
+      APP.map.removeLayer(
+        layer
+      );
+
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   CHART RENDER
+============================================================ */
+
+/*
+ * توجه:
+ *
+ * هیچ محاسبه‌ای اینجا انجام نمی‌شود.
+ *
+ * Backend باید:
+ *
+ * labels
+ * datasets
+ *
+ * را آماده کند.
+ */
+
+function renderCharts(
+  analytics
+) {
+
+  if (!analytics) {
+    return;
+  }
+
+
+  renderProjectChart(
+    analytics.projects
+  );
+
+
+  renderRegionalChart(
+    analytics.regional
+  );
+
+}
+
+
+/* ============================================================
+   PROJECT CHART
+============================================================ */
+
+function renderProjectChart(
+  chartData
+) {
+
+  const canvas =
+    document.getElementById(
+      "projectChart"
+    );
+
+
+  if (
+    APP.charts.project
+  ) {
+
+    APP.charts.project.destroy();
+
+  }
+
+
+  if (!chartData) {
+    return;
+  }
+
+
+  APP.charts.project =
+    new Chart(
+      canvas,
+      {
+
+        type:
+          chartData.type ||
+          "bar",
+
+        data: {
+
+          labels:
+            chartData.labels ||
+            [],
+
+          datasets:
+            chartData.datasets ||
+            []
+
+        },
+
+        options: {
+
+          responsive: true,
+
+          maintainAspectRatio:
+            false,
+
+          plugins: {
+
+            legend: {
+              display: true
+            }
+
+          }
+
+        }
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   REGIONAL CHART
+============================================================ */
+
+function renderRegionalChart(
+  chartData
+) {
+
+  const canvas =
+    document.getElementById(
+      "regionalChart"
+    );
+
+
+  if (
+    APP.charts.regional
+  ) {
+
+    APP.charts.regional.destroy();
+
+  }
+
+
+  if (!chartData) {
+    return;
+  }
+
+
+  APP.charts.regional =
+    new Chart(
+      canvas,
+      {
+
+        type:
+          chartData.type ||
+          "doughnut",
+
+        data: {
+
+          labels:
+            chartData.labels ||
+            [],
+
+          datasets:
+            chartData.datasets ||
+            []
+
+        },
+
+        options: {
+
+          responsive: true,
+
+          maintainAspectRatio:
+            false
+
+        }
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   ALERTS
+============================================================ */
+
+function renderAlerts(
+  alerts
+) {
+
+  DOM.alerts.innerHTML = "";
+
+
+  if (
+    !Array.isArray(alerts) ||
+    !alerts.length
+  ) {
+
+    DOM.alerts.innerHTML =
+      `<div class="empty-state">
+        هشدار یا اولویت خاصی وجود ندارد.
+      </div>`;
+
+    return;
+
+  }
+
+
+  alerts.forEach(alert => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "alert-item";
+
+
+    item.innerHTML = `
+
+      <div class="alert-title">
+        ${escapeHTML(
+          alert.title
+        )}
+      </div>
+
+      <div class="alert-description">
+        ${escapeHTML(
+          alert.description
+        )}
+      </div>
+
+    `;
+
+
+    DOM.alerts.appendChild(
+      item
+    );
+
+  });
+
+}
+
+
+/* ============================================================
+   PROJECTS
+============================================================ */
+
+function renderProjects(
+  projects
+) {
+
+  DOM.projects.innerHTML = "";
+
+
+  if (
+    !Array.isArray(projects) ||
+    !projects.length
+  ) {
+
+    DOM.projects.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="6"
+          class="empty-state"
+        >
+          پروژه‌ای برای نمایش وجود ندارد.
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  projects.forEach(
+    project => {
+
+      const tr =
+        document.createElement("tr");
+
+
+      tr.innerHTML = `
+
+        <td>
+          ${escapeHTML(
+            project.id
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            project.name
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            project.location
+          )}
+        </td>
+
+        <td>
+          ${renderStatus(
+            project.status
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            project.progress
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            project.updatedAt
+          )}
+        </td>
+
+      `;
+
+
+      DOM.projects.appendChild(
+        tr
+      );
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   STATUS RENDER
+============================================================ */
+
+function renderStatus(
+  status
+) {
+
+  if (!status) {
+    return "-";
+  }
+
+
+  /*
+   * Backend بهتر است statusKey
+   * را هم ارسال کند.
+   *
+   * Frontend فقط برای CSS
+   * از آن استفاده می‌کند.
+   */
+
+  const key =
+    status.key ||
+    status.code ||
+    "";
+
+
+  const label =
+    status.label ||
+    status.name ||
+    status;
+
+
+  let className =
+    "status-planned";
+
+
+  if (
+    key === "completed"
+  ) {
+
+    className =
+      "status-completed";
+
+  }
+
+  else if (
+    key === "in_progress"
+  ) {
+
+    className =
+      "status-progress";
+
+  }
+
+  else if (
+    key === "delayed"
+  ) {
+
+    className =
+      "status-delayed";
+
+  }
+
+  else if (
+    key === "stopped"
+  ) {
+
+    className =
+      "status-stopped";
+
+  }
+
+
+  return `
+
+    <span
+      class="status-badge ${className}"
+    >
+      ${escapeHTML(label)}
+    </span>
+
+  `;
+
+}
+
+
+/* ============================================================
+   FILTER EVENTS
+============================================================ */
+
+function bindFilters() {
+
+  DOM.filterDistrict
+    .addEventListener(
+      "change",
+      () => {
+
+        APP.filters.districtId =
+          DOM.filterDistrict.value;
+
+        loadDashboard();
+
+      }
+    );
+
+
+  DOM.filterDehestan
+    .addEventListener(
+      "change",
+      () => {
+
+        APP.filters.dehestanId =
+          DOM.filterDehestan.value;
+
+        loadDashboard();
+
+      }
+    );
+
+
+  DOM.filterStatus
+    .addEventListener(
+      "change",
+      () => {
+
+        APP.filters.status =
+          DOM.filterStatus.value;
+
+        loadDashboard();
+
+      }
+    );
+
+
+  DOM.filterProjectType
+    .addEventListener(
+      "change",
+      () => {
+
+        APP.filters.projectType =
+          DOM.filterProjectType.value;
+
+        loadDashboard();
+
+      }
+    );
+
+
+  /*
+   * Search با Enter
+   *
+   * برای اینکه هر keypress باعث Request نشود.
+   */
+
+  DOM.filterSearch
+    .addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          APP.filters.search =
+            DOM.filterSearch.value
+              .trim();
+
+          loadDashboard();
+
+        }
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   REFRESH
+============================================================ */
+
+DOM.refresh.addEventListener(
+  "click",
+  () => {
+
+    loadDashboard();
+
+  }
+);
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+function bindNavigation() {
+
+  document
+    .querySelectorAll(
+      ".nav-item"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(
+              ".nav-item"
+            )
+            .forEach(
+              item =>
+                item.classList
+                  .remove("active")
+            );
+
+
+          button.classList
+            .add("active");
+
+
+          /*
+           * نسخه اول:
+           *
+           * Navigation فقط برای آماده بودن
+           * ساختار است.
+           *
+           * صفحات بعدی می‌توانند با API
+           * جداگانه تغذیه شوند.
+           */
+
+          const view =
+            button.dataset.view;
+
+
+          if (
+            view === "map"
+          ) {
+
+            document
+              .getElementById("map")
+              ?.scrollIntoView({
+                behavior: "smooth"
+              });
+
+          }
+
+          else {
+
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+
+          }
+
+        }
+      );
+
+    });
+
+}
+
+
+/* ============================================================
+   AUTO REFRESH
+============================================================ */
+
+function setupAutoRefresh() {
+
+  if (
+    APP.refreshTimer
+  ) {
+
+    clearInterval(
+      APP.refreshTimer
+    );
+
+    APP.refreshTimer = null;
+
+  }
+
+
+  if (
+    CONFIG.refreshInterval > 0
+  ) {
+
+    APP.refreshTimer =
+      setInterval(
+        () => {
+
+          loadDashboard();
+
+        },
+        CONFIG.refreshInterval
+      );
+
+  }
+
+}
+
+
+/* ============================================================
+   APPLICATION INIT
+============================================================ */
+
+async function initApp() {
+
+  /*
+   * ابتدا Map
+   */
+
+  initMap();
+
+
+  /*
+   * Eventها
+   */
+
+  bindFilters();
+
+  bindNavigation();
+
+
+  /*
+   * Auto Refresh
+   */
+
+  setupAutoRefresh();
+
+
+  /*
+   * دریافت Dashboard
+   */
+
+  await loadDashboard();
+
+}
+
+
+/* ============================================================
+   START
+============================================================ */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    initApp()
+      .catch(error => {
+
+        console.error(error);
+
+        showError(
+          error.message ||
+          "خطای غیرمنتظره در اجرای سامانه"
+        );
+
+      });
+
+  }
+);
+
+</script>
+
+</body>
+</html>

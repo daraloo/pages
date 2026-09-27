@@ -1,0 +1,2497 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DARALOO SMART SOCIAL ATLAS</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+:root{
+    --bg:#eef1f5;
+    --panel:#ffffff;
+    --panel-soft:#f7f8fa;
+    --text:#20252b;
+    --muted:#7c858f;
+    --border:#e3e7eb;
+    --primary:#c86d24;
+    --primary-dark:#914817;
+    --primary-soft:#fff1e4;
+    --success:#2e9b68;
+    --warning:#d99b27;
+    --danger:#d95454;
+    --info:#4384c5;
+    --shadow:0 12px 35px rgba(35,42,50,.08);
+    --radius:18px;
+    --sidebar:285px;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:"Vazirmatn",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+}
+
+button,
+input,
+select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+    display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    width:var(--sidebar);
+    background:#1f252b;
+    color:#fff;
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    z-index:1000;
+    overflow-y:auto;
+    padding:20px 16px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 8px 22px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    margin-bottom:18px;
+}
+
+.brand-logo{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#d87b2d,#934914);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    box-shadow:0 8px 22px rgba(0,0,0,.22);
+}
+
+.brand h1{
+    margin:0;
+    font-size:14px;
+    font-weight:800;
+}
+
+.brand span{
+    display:block;
+    margin-top:3px;
+    font-size:10px;
+    color:#aeb5bb;
+}
+
+.side-section{
+    margin:18px 0;
+}
+
+.side-title{
+    color:#858e96;
+    font-size:10px;
+    font-weight:700;
+    margin:0 8px 10px;
+    letter-spacing:.4px;
+}
+
+.side-item{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#dce1e5;
+    padding:11px 12px;
+    border-radius:12px;
+    text-align:right;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:4px;
+    transition:.2s;
+}
+
+.side-item:hover,
+.side-item.active{
+    background:rgba(255,255,255,.08);
+    color:#fff;
+}
+
+.side-item .icon{
+    width:25px;
+    text-align:center;
+}
+
+.layer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 9px;
+    border-radius:10px;
+}
+
+.layer:hover{
+    background:rgba(255,255,255,.05);
+}
+
+.layer label{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:12px;
+    cursor:pointer;
+    color:#d7dce0;
+}
+
+.layer input{
+    accent-color:var(--primary);
+    width:15px;
+    height:15px;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    width:calc(100% - var(--sidebar));
+    margin-right:var(--sidebar);
+    min-height:100vh;
+    padding:18px;
+}
+
+.topbar{
+    height:68px;
+    background:var(--panel);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    margin-bottom:18px;
+}
+
+.top-title h2{
+    margin:0;
+    font-size:19px;
+    font-weight:800;
+}
+
+.top-title p{
+    margin:4px 0 0;
+    font-size:11px;
+    color:var(--muted);
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:8px 12px;
+    background:#f5f7f8;
+    border-radius:10px;
+    font-size:11px;
+    color:var(--muted);
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--success);
+    box-shadow:0 0 0 4px rgba(46,155,104,.12);
+}
+
+.icon-btn{
+    width:38px;
+    height:38px;
+    border:0;
+    border-radius:11px;
+    background:#f3f5f7;
+    color:#68717a;
+}
+
+/* ================= KPI ================= */
+
+.kpis{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:13px;
+    margin-bottom:18px;
+}
+
+.kpi{
+    background:var(--panel);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:17px;
+    position:relative;
+    overflow:hidden;
+}
+
+.kpi::after{
+    content:"";
+    position:absolute;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    left:-25px;
+    bottom:-25px;
+    background:var(--primary-soft);
+}
+
+.kpi-icon{
+    width:36px;
+    height:36px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--primary-soft);
+    color:var(--primary);
+    font-size:17px;
+    margin-bottom:12px;
+}
+
+.kpi-label{
+    font-size:10px;
+    color:var(--muted);
+}
+
+.kpi-value{
+    font-size:24px;
+    font-weight:800;
+    margin-top:3px;
+}
+
+.kpi-sub{
+    margin-top:5px;
+    font-size:9px;
+    color:var(--muted);
+}
+
+/* ================= GRID ================= */
+
+.grid-main{
+    display:grid;
+    grid-template-columns:1.65fr .85fr;
+    gap:18px;
+}
+
+.card{
+    background:var(--panel);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.card-header{
+    padding:17px 19px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+}
+
+.card-header h3{
+    margin:0;
+    font-size:14px;
+    font-weight:800;
+}
+
+.card-header span{
+    font-size:10px;
+    color:var(--muted);
+}
+
+.map-card{
+    min-height:540px;
+}
+
+#map{
+    width:100%;
+    height:490px;
+}
+
+.map-toolbar{
+    position:absolute;
+    z-index:500;
+    margin:14px;
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+}
+
+.map-control{
+    border:0;
+    background:rgba(255,255,255,.94);
+    box-shadow:0 5px 18px rgba(0,0,0,.12);
+    padding:8px 11px;
+    border-radius:10px;
+    font-size:10px;
+}
+
+/* ================= CHARTS ================= */
+
+.chart-box{
+    padding:18px;
+    height:260px;
+}
+
+.chart-box canvas{
+    max-height:220px;
+}
+
+.right-stack{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.progress-list{
+    padding:15px 18px 20px;
+}
+
+.progress-item{
+    margin-bottom:16px;
+}
+
+.progress-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    margin-bottom:6px;
+}
+
+.progress-head span:last-child{
+    font-weight:800;
+}
+
+.progress{
+    height:8px;
+    border-radius:20px;
+    background:#edf0f2;
+    overflow:hidden;
+}
+
+.progress span{
+    display:block;
+    height:100%;
+    border-radius:20px;
+    background:linear-gradient(90deg,var(--primary),#e7a25f);
+}
+
+/* ================= LOWER ================= */
+
+.lower-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:18px;
+}
+
+.project-list{
+    padding:12px;
+}
+
+.project{
+    display:grid;
+    grid-template-columns:40px 1fr auto;
+    gap:11px;
+    align-items:center;
+    padding:11px;
+    border-bottom:1px solid var(--border);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.project:hover{
+    background:#fafafa;
+}
+
+.project:last-child{
+    border-bottom:0;
+}
+
+.project-icon{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--primary-soft);
+    color:var(--primary);
+}
+
+.project-name{
+    font-size:11px;
+    font-weight:700;
+}
+
+.project-meta{
+    font-size:9px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.badge{
+    font-size:8px;
+    border-radius:20px;
+    padding:5px 8px;
+    white-space:nowrap;
+}
+
+.badge.success{
+    background:#e8f7ef;
+    color:#238456;
+}
+
+.badge.warning{
+    background:#fff4df;
+    color:#a36b08;
+}
+
+.badge.danger{
+    background:#fdeaea;
+    color:#bc3e3e;
+}
+
+.badge.info{
+    background:#e9f2fc;
+    color:#3375b4;
+}
+
+/* ================= ALERTS ================= */
+
+.alert-list{
+    padding:10px 15px 15px;
+}
+
+.alert{
+    padding:12px;
+    display:flex;
+    gap:10px;
+    border-bottom:1px solid var(--border);
+}
+
+.alert:last-child{
+    border-bottom:0;
+}
+
+.alert-icon{
+    width:32px;
+    height:32px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:none;
+}
+
+.alert-icon.warning{
+    background:#fff3db;
+    color:#bd7c12;
+}
+
+.alert-icon.danger{
+    background:#fde8e8;
+    color:#c54343;
+}
+
+.alert-icon.info{
+    background:#eaf3fd;
+    color:#3d78b2;
+}
+
+.alert-title{
+    font-size:10px;
+    font-weight:700;
+}
+
+.alert-text{
+    font-size:9px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+/* ================= POPUP ================= */
+
+.popup-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(20,25,30,.45);
+    backdrop-filter:blur(4px);
+    z-index:3000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.popup-overlay.show{
+    display:flex;
+}
+
+.modal{
+    width:min(650px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:22px;
+    box-shadow:0 30px 90px rgba(0,0,0,.25);
+}
+
+.modal-header{
+    padding:18px 20px;
+    background:linear-gradient(135deg,#303840,#1f252b);
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.modal-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.modal-title-icon{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    background:rgba(255,255,255,.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-title h3{
+    margin:0;
+    font-size:15px;
+}
+
+.modal-title p{
+    margin:3px 0 0;
+    color:#aeb6bd;
+    font-size:9px;
+}
+
+.close{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:10px;
+    background:rgba(255,255,255,.1);
+    color:#fff;
+    font-size:20px;
+}
+
+.modal-body{
+    padding:20px;
+}
+
+.identity{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.info{
+    background:#f7f8fa;
+    border-radius:12px;
+    padding:11px;
+}
+
+.info label{
+    display:block;
+    font-size:9px;
+    color:var(--muted);
+}
+
+.info strong{
+    display:block;
+    margin-top:4px;
+    font-size:11px;
+}
+
+.section-title{
+    font-size:12px;
+    font-weight:800;
+    margin:20px 0 10px;
+}
+
+.modal-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:0;
+    border-radius:11px;
+    padding:10px 14px;
+    font-size:10px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn-secondary{
+    background:#f0f2f4;
+    color:#59616a;
+}
+
+/* ================= RESPONSIVE ================= */
+
+.mobile-menu{
+    display:none;
+}
+
+@media(max-width:1250px){
+    .kpis{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:950px){
+    :root{
+        --sidebar:0px;
+    }
+
+    .sidebar{
+        transform:translateX(100%);
+        transition:.25s;
+        width:285px;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-right:0;
+        width:100%;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .grid-main,
+    .lower-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    .main{
+        padding:10px;
+    }
+
+    .topbar{
+        padding:0 12px;
+    }
+
+    .top-title h2{
+        font-size:15px;
+    }
+
+    .status{
+        display:none;
+    }
+
+    .kpis{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .identity{
+        grid-template-columns:1fr 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+        <div class="brand-logo">◆</div>
+        <div>
+            <h1>DARALOO SMART SOCIAL ATLAS</h1>
+            <span>سامانه هوشمند مسئولیت‌های اجتماعی</span>
+        </div>
+    </div>
+
+    <div class="side-section">
+
+        <div class="side-title">NAVIGATION</div>
+
+        <button class="side-item active">
+            <span class="icon">⌂</span>
+            داشبورد مدیریتی
+        </button>
+
+        <button class="side-item">
+            <span class="icon">◉</span>
+            اطلس GIS
+        </button>
+
+        <button class="side-item">
+            <span class="icon">▣</span>
+            پروژه‌های اجتماعی
+        </button>
+
+        <button class="side-item">
+            <span class="icon">⌂</span>
+            روستاها و آبادی‌ها
+        </button>
+
+        <button class="side-item">
+            <span class="icon">♧</span>
+            جوامع عشایری
+        </button>
+
+        <button class="side-item">
+            <span class="icon">▤</span>
+            گزارش‌ها و تحلیل‌ها
+        </button>
+
+    </div>
+
+    <div class="side-section">
+
+        <div class="side-title">MAP LAYERS</div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-layer="villages" checked>
+                روستاها
+            </label>
+        </div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-layer="districts" checked>
+                دهستان‌ها
+            </label>
+        </div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-layer="nomads" checked>
+                عشایر
+            </label>
+        </div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-layer="projects" checked>
+                پروژه‌ها
+            </label>
+        </div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-layer="infrastructure" checked>
+                زیرساخت‌ها
+            </label>
+        </div>
+
+    </div>
+
+    <div class="side-section">
+
+        <div class="side-title">PROJECT FILTER</div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-status="completed" checked>
+                تکمیل‌شده
+            </label>
+        </div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-status="progress" checked>
+                در حال اجرا
+            </label>
+        </div>
+
+        <div class="layer">
+            <label>
+                <input type="checkbox" data-status="delayed" checked>
+                دارای تأخیر
+            </label>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+    <header class="topbar">
+
+        <div class="top-title">
+
+            <h2>داشبورد هوشمند مسئولیت‌های اجتماعی</h2>
+
+            <p>
+                منطقه رابر، بردسیر و جوامع پیرامونی مجتمع مس درآلو
+            </p>
+
+        </div>
+
+        <div class="top-actions">
+
+            <div class="status">
+                <span class="status-dot"></span>
+                آخرین بروزرسانی: <b id="lastUpdate">در حال دریافت...</b>
+            </div>
+
+            <button class="icon-btn" id="refreshBtn">↻</button>
+
+            <button class="icon-btn mobile-menu" id="menuBtn">☰</button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= KPI ================= -->
+
+    <section class="kpis" id="kpiContainer"></section>
+
+
+    <!-- ================= MAIN GRID ================= -->
+
+    <section class="grid-main">
+
+        <div class="card map-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h3>اطلس مکانی منطقه</h3>
+                    <span>نمایش وضعیت مکانی مناطق، پروژه‌ها و زیرساخت‌ها</span>
+                </div>
+
+                <button class="btn btn-secondary" onclick="fitMap()">
+                    نمایش کل منطقه
+                </button>
+
+            </div>
+
+            <div id="map"></div>
+
+        </div>
+
+
+        <div class="right-stack">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h3>وضعیت پروژه‌های CSR</h3>
+                    <span>Portfolio</span>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="projectChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h3>شاخص‌های منطقه‌ای</h3>
+                    <span>Regional Indicators</span>
+                </div>
+
+                <div class="progress-list" id="indicators"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= LOWER ================= -->
+
+    <section class="lower-grid">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+                    <h3>پروژه‌های شاخص</h3>
+                    <span>آخرین پروژه‌های ثبت‌شده</span>
+                </div>
+
+                <button class="btn btn-secondary">
+                    مشاهده همه
+                </button>
+
+            </div>
+
+            <div class="project-list" id="projectList"></div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div>
+                    <h3>هشدارها و نقاط نیازمند توجه</h3>
+                    <span>Decision Support</span>
+                </div>
+
+            </div>
+
+            <div class="alert-list" id="alerts"></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</div>
+
+
+<!-- ================= MODAL ================= -->
+
+<div class="popup-overlay" id="modal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div class="modal-title">
+
+                <div class="modal-title-icon" id="modalIcon">⌂</div>
+
+                <div>
+                    <h3 id="modalTitle">عنوان</h3>
+                    <p id="modalSubtitle">شناسه</p>
+                </div>
+
+            </div>
+
+            <button class="close" onclick="closeModal()">×</button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="identity" id="modalIdentity"></div>
+
+            <div class="section-title">خلاصه وضعیت</div>
+
+            <div id="modalDescription"
+                 style="font-size:11px;line-height:2;color:#626b74">
+            </div>
+
+            <div class="section-title">اقدامات</div>
+
+            <div class="modal-actions">
+
+                <button class="btn btn-primary" id="mainDocumentBtn">
+                    مشاهده سند اصلی
+                </button>
+
+                <button class="btn btn-secondary" onclick="closeModal()">
+                    بستن
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   CONFIGURATION
+============================================================ */
+
+const CONFIG = {
+    gasUrl: "https://script.google.com/macros/s/AKfycbyIoSPXveCldX_uivjmH7Y47pWKcRoN5pc8-qR3hRh7a_VHJqPS9XJ-pF6rJkZ9LtjW/exec",
+    requestTimeout: 30000,
+    refreshInterval: 0
+};
+
+
+/* ============================================================
+   APPLICATION STATE
+============================================================ */
+
+const STATE = {
+
+    data: null,
+
+    map: null,
+
+    layers: {
+        villages: L.layerGroup(),
+        districts: L.layerGroup(),
+        nomads: L.layerGroup(),
+        projects: L.layerGroup(),
+        infrastructure: L.layerGroup()
+    },
+
+    filters: {
+        completed: true,
+        progress: true,
+        delayed: true
+    }
+
+};
+
+
+/* ============================================================
+   MOCK DATA
+   این قسمت بعداً مستقیماً از GAS دریافت خواهد شد.
+============================================================ */
+
+const MOCK_DATA = {
+
+    meta: {
+        updatedAt: new Date().toLocaleString("fa-IR")
+    },
+
+    kpis: [
+        {
+            id:"villages",
+            icon:"⌂",
+            label:"روستا و آبادی",
+            value:"۸۷",
+            sub:"محدوده تحت پوشش"
+        },
+        {
+            id:"districts",
+            icon:"◈",
+            label:"دهستان",
+            value:"۱۲",
+            sub:"محدوده‌های ثبت‌شده"
+        },
+        {
+            id:"nomads",
+            icon:"♧",
+            label:"جامعه عشایری",
+            value:"۳۴",
+            sub:"سامانه‌های ثبت‌شده"
+        },
+        {
+            id:"projects",
+            icon:"▣",
+            label:"پروژه‌های CSR",
+            value:"۸۶",
+            sub:"کل پروژه‌ها"
+        },
+        {
+            id:"investment",
+            icon:"₿",
+            label:"سرمایه‌گذاری",
+            value:"۱۲۴",
+            sub:"میلیارد تومان"
+        },
+        {
+            id:"completion",
+            icon:"✓",
+            label:"درصد تحقق",
+            value:"۷۸٪",
+            sub:"پیشرفت کل پروژه‌ها"
+        }
+    ],
+
+    projectStatus: {
+        completed: 52,
+        progress: 21,
+        delayed: 8,
+        planned: 5
+    },
+
+    indicators: [
+        {
+            name:"پوشش خدمات زیرساختی",
+            value:82
+        },
+        {
+            name:"پوشش خدمات آموزشی",
+            value:76
+        },
+        {
+            name:"پوشش خدمات سلامت",
+            value:68
+        },
+        {
+            name:"دسترسی به آب پایدار",
+            value:73
+        },
+        {
+            name:"پوشش راه دسترسی",
+            value:81
+        }
+    ],
+
+    projects: [
+
+        {
+            id:"PROJ-0001",
+            name:"بهسازی شبکه آب روستایی",
+            category:"آب",
+            location:"رابر",
+            status:"completed",
+            progress:100,
+            budget:"۱۲.۴ میلیارد تومان",
+            lat:29.285,
+            lng:56.915,
+            description:"پروژه بهسازی و توسعه شبکه تأمین آب چند روستای منطقه.",
+            documentUrl:"#"
+        },
+
+        {
+            id:"PROJ-0002",
+            name:"احداث مجموعه ورزشی روستایی",
+            category:"ورزش",
+            location:"دهستان اسفندقه",
+            status:"progress",
+            progress:64,
+            budget:"۸.۷ میلیارد تومان",
+            lat:29.055,
+            lng:57.125,
+            description:"احداث مجموعه ورزشی چندمنظوره برای جامعه محلی.",
+            documentUrl:"#"
+        },
+
+        {
+            id:"PROJ-0003",
+            name:"بهسازی محور دسترسی روستاها",
+            category:"راه",
+            location:"بردسیر",
+            status:"delayed",
+            progress:38,
+            budget:"۲۱.۶ میلیارد تومان",
+            lat:29.927,
+            lng:56.570,
+            description:"پروژه بهسازی و ارتقای مسیر ارتباطی چند روستای پیرامونی.",
+            documentUrl:"#"
+        },
+
+        {
+            id:"PROJ-0004",
+            name:"تجهیز مدرسه روستایی",
+            category:"آموزش",
+            location:"رابر",
+            status:"completed",
+            progress:100,
+            budget:"۳.۱ میلیارد تومان",
+            lat:29.300,
+            lng:56.950,
+            description:"تجهیز و بهسازی فضای آموزشی روستا.",
+            documentUrl:"#"
+        }
+
+    ],
+
+    villages: [
+
+        {
+            id:"VIL-0001",
+            name:"روستای نمونه ۱",
+            district:"دهستان نمونه",
+            population:1240,
+            households:318,
+            lat:29.310,
+            lng:56.930,
+            documentUrl:"#"
+        },
+
+        {
+            id:"VIL-0002",
+            name:"روستای نمونه ۲",
+            district:"دهستان نمونه",
+            population:870,
+            households:226,
+            lat:29.270,
+            lng:56.970,
+            documentUrl:"#"
+        },
+
+        {
+            id:"VIL-0003",
+            name:"روستای نمونه ۳",
+            district:"دهستان اسفندقه",
+            population:630,
+            households:174,
+            lat:29.080,
+            lng:57.110,
+            documentUrl:"#"
+        }
+
+    ],
+
+    nomads: [
+
+        {
+            id:"TRB-0001",
+            name:"جامعه عشایری نمونه",
+            households:145,
+            population:620,
+            lat:29.180,
+            lng:57.040,
+            documentUrl:"#"
+        }
+
+    ],
+
+    districts: [
+
+        {
+            id:"DS-0001",
+            name:"دهستان نمونه",
+            polygon:[
+                [29.34,56.89],
+                [29.34,57.00],
+                [29.25,57.02],
+                [29.22,56.90]
+            ],
+            documentUrl:"#"
+        },
+
+        {
+            id:"DS-0002",
+            name:"دهستان اسفندقه",
+            polygon:[
+                [29.14,57.04],
+                [29.14,57.18],
+                [29.02,57.20],
+                [29.00,57.05]
+            ],
+            documentUrl:"#"
+        }
+
+    ],
+
+    infrastructure: [
+
+        {
+            id:"INF-001",
+            type:"مدرسه",
+            name:"مدرسه نمونه",
+            lat:29.305,
+            lng:56.944
+        },
+
+        {
+            id:"INF-002",
+            type:"مرکز درمانی",
+            name:"خانه بهداشت نمونه",
+            lat:29.274,
+            lng:56.960
+        }
+
+    ],
+
+    alerts: [
+
+        {
+            type:"danger",
+            title:"پروژه دارای تأخیر",
+            text:"پروژه بهسازی محور دسترسی روستاها با ۳۸٪ پیشرفت در وضعیت تأخیر قرار دارد."
+        },
+
+        {
+            type:"warning",
+            title:"شکاف خدمات سلامت",
+            text:"پوشش خدمات سلامت در برخی محدوده‌های روستایی پایین‌تر از میانگین منطقه است."
+        },
+
+        {
+            type:"info",
+            title:"بروزرسانی اطلاعات",
+            text:"داده‌های میدانی ۴ روستا نیازمند بروزرسانی دوره‌ای هستند."
+        }
+
+    ]
+
+};
+
+
+/* ============================================================
+   API LAYER
+   تنها نقطه ارتباط Frontend با GAS
+============================================================ */
+
+async function apiRequest(action, params = {}) {
+
+    if (!CONFIG.gasUrl || CONFIG.gasUrl === "***") {
+
+        console.warn("GAS URL هنوز تنظیم نشده است.");
+
+        return MOCK_DATA;
+    }
+
+    const controller = new AbortController();
+
+    const timeout = setTimeout(
+        () => controller.abort(),
+        CONFIG.requestTimeout
+    );
+
+    try {
+
+        const query = new URLSearchParams({
+            action,
+            ...params
+        });
+
+        const response = await fetch(
+            `${CONFIG.gasUrl}?${query.toString()}`,
+            {
+                method:"GET",
+                signal:controller.signal,
+                headers:{
+                    "Accept":"application/json"
+                }
+            }
+        );
+
+        if(!response.ok){
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        return await response.json();
+
+    } finally {
+
+        clearTimeout(timeout);
+
+    }
+
+}
+
+
+/* ============================================================
+   LOAD DATA
+============================================================ */
+
+async function loadDashboard(){
+
+    setLoading(true);
+
+    try {
+
+        const data = await apiRequest("dashboard");
+
+        STATE.data = data;
+
+        renderDashboard();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        STATE.data = MOCK_DATA;
+
+        renderDashboard();
+
+    }
+
+    finally{
+
+        setLoading(false);
+
+    }
+
+}
+
+
+/* ============================================================
+   RENDER DASHBOARD
+============================================================ */
+
+function renderDashboard(){
+
+    renderKPIs();
+
+    renderIndicators();
+
+    renderProjects();
+
+    renderAlerts();
+
+    renderProjectChart();
+
+    renderMap();
+
+    document.getElementById("lastUpdate").textContent =
+        STATE.data.meta?.updatedAt || "اکنون";
+
+}
+
+
+/* ============================================================
+   KPI
+============================================================ */
+
+function renderKPIs(){
+
+    const container =
+        document.getElementById("kpiContainer");
+
+    container.innerHTML = "";
+
+    STATE.data.kpis.forEach(kpi => {
+
+        const el = document.createElement("div");
+
+        el.className = "kpi";
+
+        el.innerHTML = `
+
+            <div class="kpi-icon">
+                ${kpi.icon}
+            </div>
+
+            <div class="kpi-label">
+                ${kpi.label}
+            </div>
+
+            <div class="kpi-value">
+                ${kpi.value}
+            </div>
+
+            <div class="kpi-sub">
+                ${kpi.sub}
+            </div>
+        `;
+
+        container.appendChild(el);
+
+    });
+
+}
+
+
+/* ============================================================
+   PROJECT CHART
+============================================================ */
+
+let projectChart = null;
+
+function renderProjectChart(){
+
+    const ctx =
+        document.getElementById("projectChart");
+
+    if(projectChart){
+        projectChart.destroy();
+    }
+
+    const data = STATE.data.projectStatus;
+
+    projectChart = new Chart(ctx,{
+
+        type:"doughnut",
+
+        data:{
+            labels:[
+                "تکمیل‌شده",
+                "در حال اجرا",
+                "دارای تأخیر",
+                "برنامه‌ریزی‌شده"
+            ],
+
+            datasets:[{
+                data:[
+                    data.completed,
+                    data.progress,
+                    data.delayed,
+                    data.planned
+                ],
+
+                borderWidth:0
+            }]
+        },
+
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+
+            plugins:{
+                legend:{
+                    position:"bottom",
+                    rtl:true,
+                    labels:{
+                        font:{
+                            family:"Vazirmatn",
+                            size:10
+                        },
+                        usePointStyle:true,
+                        padding:14
+                    }
+                }
+            },
+
+            cutout:"68%"
+        }
+
+    });
+
+}
+
+
+/* ============================================================
+   INDICATORS
+============================================================ */
+
+function renderIndicators(){
+
+    const container =
+        document.getElementById("indicators");
+
+    container.innerHTML = "";
+
+    STATE.data.indicators.forEach(item => {
+
+        const el = document.createElement("div");
+
+        el.className = "progress-item";
+
+        el.innerHTML = `
+
+            <div class="progress-head">
+
+                <span>${item.name}</span>
+
+                <span>${item.value}%</span>
+
+            </div>
+
+            <div class="progress">
+
+                <span style="width:${item.value}%"></span>
+
+            </div>
+        `;
+
+        container.appendChild(el);
+
+    });
+
+}
+
+
+/* ============================================================
+   PROJECTS
+============================================================ */
+
+function renderProjects(){
+
+    const container =
+        document.getElementById("projectList");
+
+    container.innerHTML = "";
+
+    STATE.data.projects
+        .slice(0,6)
+        .forEach(project => {
+
+            const status = getStatus(project.status);
+
+            const el =
+                document.createElement("div");
+
+            el.className = "project";
+
+            el.onclick = () =>
+                openEntity("project",project);
+
+            el.innerHTML = `
+
+                <div class="project-icon">
+                    ▣
+                </div>
+
+                <div>
+
+                    <div class="project-name">
+                        ${project.name}
+                    </div>
+
+                    <div class="project-meta">
+                        ${project.id} · ${project.location}
+                        · ${project.progress}٪
+                    </div>
+
+                </div>
+
+                <span class="badge ${status.class}">
+                    ${status.label}
+                </span>
+            `;
+
+            container.appendChild(el);
+
+        });
+
+}
+
+
+function getStatus(status){
+
+    const map = {
+
+        completed:{
+            label:"تکمیل‌شده",
+            class:"success"
+        },
+
+        progress:{
+            label:"در حال اجرا",
+            class:"info"
+        },
+
+        delayed:{
+            label:"دارای تأخیر",
+            class:"danger"
+        },
+
+        planned:{
+            label:"برنامه‌ریزی",
+            class:"warning"
+        }
+
+    };
+
+    return map[status] || {
+        label:status,
+        class:"info"
+    };
+
+}
+
+
+/* ============================================================
+   ALERTS
+============================================================ */
+
+function renderAlerts(){
+
+    const container =
+        document.getElementById("alerts");
+
+    container.innerHTML = "";
+
+    STATE.data.alerts.forEach(alert => {
+
+        const el =
+            document.createElement("div");
+
+        el.className = "alert";
+
+        const icons = {
+            danger:"!",
+            warning:"▲",
+            info:"i"
+        };
+
+        el.innerHTML = `
+
+            <div class="alert-icon ${alert.type}">
+                ${icons[alert.type] || "i"}
+            </div>
+
+            <div>
+
+                <div class="alert-title">
+                    ${alert.title}
+                </div>
+
+                <div class="alert-text">
+                    ${alert.text}
+                </div>
+
+            </div>
+        `;
+
+        container.appendChild(el);
+
+    });
+
+}
+
+
+/* ============================================================
+   MAP INITIALIZATION
+============================================================ */
+
+function initMap(){
+
+    STATE.map = L.map("map",{
+
+        zoomControl:true,
+
+        attributionControl:true
+
+    }).setView(
+        [29.28,56.95],
+        9
+    );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom:19,
+            attribution:"© OpenStreetMap"
+        }
+    ).addTo(STATE.map);
+
+
+    Object.values(STATE.layers)
+        .forEach(layer => layer.addTo(STATE.map));
+
+
+    renderMapLayers();
+
+}
+
+
+/* ============================================================
+   MAP LAYERS
+============================================================ */
+
+function renderMap(){
+
+    if(!STATE.map){
+        initMap();
+        return;
+    }
+
+    renderMapLayers();
+
+}
+
+
+function renderMapLayers(){
+
+    Object.values(STATE.layers)
+        .forEach(layer => layer.clearLayers());
+
+
+    renderVillages();
+
+    renderDistricts();
+
+    renderNomads();
+
+    renderProjectsOnMap();
+
+    renderInfrastructure();
+
+}
+
+
+/* ============================================================
+   VILLAGES
+============================================================ */
+
+function renderVillages(){
+
+    if(!document.querySelector(
+        '[data-layer="villages"]'
+    ).checked) return;
+
+
+    STATE.data.villages.forEach(village => {
+
+        const marker =
+            L.circleMarker(
+                [village.lat,village.lng],
+                {
+                    radius:7,
+                    color:"#ffffff",
+                    weight:2,
+                    fillColor:"#4384c5",
+                    fillOpacity:.9
+                }
+            );
+
+
+        marker.bindPopup(`
+            <div style="font-family:Vazirmatn;direction:rtl;min-width:190px">
+
+                <strong>${village.name}</strong>
+
+                <hr>
+
+                <div>شناسه: ${village.id}</div>
+                <div>دهستان: ${village.district}</div>
+                <div>جمعیت: ${village.population.toLocaleString("fa-IR")}</div>
+                <div>خانوار: ${village.households.toLocaleString("fa-IR")}</div>
+
+                <br>
+
+                <button
+                    onclick='openEntity("village",${JSON.stringify(village)})'
+                    style="border:0;background:#c86d24;color:#fff;padding:7px 10px;border-radius:7px;font-family:inherit;cursor:pointer">
+                    مشاهده شناسنامه
+                </button>
+
+            </div>
+        `);
+
+        STATE.layers.villages.addLayer(marker);
+
+    });
+
+}
+
+
+/* ============================================================
+   DISTRICTS
+============================================================ */
+
+function renderDistricts(){
+
+    if(!document.querySelector(
+        '[data-layer="districts"]'
+    ).checked) return;
+
+
+    STATE.data.districts.forEach(district => {
+
+        const polygon =
+            L.polygon(
+                district.polygon,
+                {
+                    color:"#c86d24",
+                    weight:2,
+                    fillColor:"#e9a261",
+                    fillOpacity:.12
+                }
+            );
+
+
+        polygon.bindPopup(`
+            <div style="font-family:Vazirmatn;direction:rtl">
+
+                <strong>${district.name}</strong>
+
+                <hr>
+
+                <div>شناسه: ${district.id}</div>
+
+                <br>
+
+                <button
+                    onclick='openEntity("district",${JSON.stringify(district)})'
+                    style="border:0;background:#c86d24;color:#fff;padding:7px 10px;border-radius:7px;font-family:inherit;cursor:pointer">
+                    مشاهده شناسنامه
+                </button>
+
+            </div>
+        `);
+
+
+        STATE.layers.districts.addLayer(polygon);
+
+    });
+
+}
+
+
+/* ============================================================
+   NOMADS
+============================================================ */
+
+function renderNomads(){
+
+    if(!document.querySelector(
+        '[data-layer="nomads"]'
+    ).checked) return;
+
+
+    STATE.data.nomads.forEach(item => {
+
+        const marker =
+            L.marker(
+                [item.lat,item.lng]
+            );
+
+
+        marker.bindPopup(`
+            <div style="font-family:Vazirmatn;direction:rtl">
+
+                <strong>${item.name}</strong>
+
+                <hr>
+
+                <div>شناسه: ${item.id}</div>
+                <div>جمعیت: ${item.population}</div>
+                <div>خانوار: ${item.households}</div>
+
+                <br>
+
+                <button
+                    onclick='openEntity("nomad",${JSON.stringify(item)})'
+                    style="border:0;background:#c86d24;color:#fff;padding:7px 10px;border-radius:7px;font-family:inherit;cursor:pointer">
+                    مشاهده شناسنامه
+                </button>
+
+            </div>
+        `);
+
+
+        STATE.layers.nomads.addLayer(marker);
+
+    });
+
+}
+
+
+/* ============================================================
+   PROJECTS ON MAP
+============================================================ */
+
+function renderProjectsOnMap(){
+
+    if(!document.querySelector(
+        '[data-layer="projects"]'
+    ).checked) return;
+
+
+    STATE.data.projects.forEach(project => {
+
+        if(!STATE.filters[project.status]){
+            return;
+        }
+
+
+        const color = {
+
+            completed:"#2e9b68",
+
+            progress:"#4384c5",
+
+            delayed:"#d95454",
+
+            planned:"#d99b27"
+
+        }[project.status] || "#c86d24";
+
+
+        const marker =
+            L.circleMarker(
+                [project.lat,project.lng],
+                {
+                    radius:9,
+                    color:"#fff",
+                    weight:2,
+                    fillColor:color,
+                    fillOpacity:.95
+                }
+            );
+
+
+        marker.bindPopup(`
+            <div style="font-family:Vazirmatn;direction:rtl;min-width:210px">
+
+                <strong>${project.name}</strong>
+
+                <hr>
+
+                <div>شناسه: ${project.id}</div>
+                <div>حوزه: ${project.category}</div>
+                <div>مکان: ${project.location}</div>
+                <div>پیشرفت: ${project.progress}%</div>
+                <div>بودجه: ${project.budget}</div>
+
+                <br>
+
+                <button
+                    onclick='openEntity("project",${JSON.stringify(project)})'
+                    style="border:0;background:#c86d24;color:#fff;padding:7px 10px;border-radius:7px;font-family:inherit;cursor:pointer">
+                    شناسنامه پروژه
+                </button>
+
+            </div>
+        `);
+
+
+        STATE.layers.projects.addLayer(marker);
+
+    });
+
+}
+
+
+/* ============================================================
+   INFRASTRUCTURE
+============================================================ */
+
+function renderInfrastructure(){
+
+    if(!document.querySelector(
+        '[data-layer="infrastructure"]'
+    ).checked) return;
+
+
+    STATE.data.infrastructure.forEach(item => {
+
+        const marker =
+            L.circleMarker(
+                [item.lat,item.lng],
+                {
+                    radius:6,
+                    color:"#fff",
+                    weight:2,
+                    fillColor:"#7c858f",
+                    fillOpacity:.9
+                }
+            );
+
+
+        marker.bindPopup(`
+            <div style="font-family:Vazirmatn;direction:rtl">
+
+                <strong>${item.name}</strong>
+
+                <hr>
+
+                <div>نوع: ${item.type}</div>
+                <div>شناسه: ${item.id}</div>
+
+            </div>
+        `);
+
+
+        STATE.layers.infrastructure.addLayer(marker);
+
+    });
+
+}
+
+
+/* ============================================================
+   ENTITY PROFILE MODAL
+============================================================ */
+
+function openEntity(type,entity){
+
+    const modal =
+        document.getElementById("modal");
+
+    const title =
+        document.getElementById("modalTitle");
+
+    const subtitle =
+        document.getElementById("modalSubtitle");
+
+    const identity =
+        document.getElementById("modalIdentity");
+
+    const description =
+        document.getElementById("modalDescription");
+
+    const documentBtn =
+        document.getElementById("mainDocumentBtn");
+
+
+    identity.innerHTML = "";
+
+
+    if(type === "project"){
+
+        title.textContent = entity.name;
+
+        subtitle.textContent =
+            `پروژه مسئولیت اجتماعی · ${entity.id}`;
+
+        identity.innerHTML = `
+
+            <div class="info">
+                <label>حوزه</label>
+                <strong>${entity.category}</strong>
+            </div>
+
+            <div class="info">
+                <label>مکان</label>
+                <strong>${entity.location}</strong>
+            </div>
+
+            <div class="info">
+                <label>پیشرفت</label>
+                <strong>${entity.progress}%</strong>
+            </div>
+
+            <div class="info">
+                <label>وضعیت</label>
+                <strong>${getStatus(entity.status).label}</strong>
+            </div>
+
+            <div class="info">
+                <label>بودجه</label>
+                <strong>${entity.budget}</strong>
+            </div>
+
+            <div class="info">
+                <label>شناسه</label>
+                <strong>${entity.id}</strong>
+            </div>
+        `;
+
+        description.textContent =
+            entity.description;
+
+    }
+
+
+    else if(type === "village"){
+
+        title.textContent =
+            entity.name;
+
+        subtitle.textContent =
+            `شناسنامه روستا · ${entity.id}`;
+
+        identity.innerHTML = `
+
+            <div class="info">
+                <label>دهستان</label>
+                <strong>${entity.district}</strong>
+            </div>
+
+            <div class="info">
+                <label>جمعیت</label>
+                <strong>${entity.population}</strong>
+            </div>
+
+            <div class="info">
+                <label>خانوار</label>
+                <strong>${entity.households}</strong>
+            </div>
+
+            <div class="info">
+                <label>شناسه</label>
+                <strong>${entity.id}</strong>
+            </div>
+        `;
+
+        description.textContent =
+            "این بخش خلاصه‌ای از وضعیت موجود روستا را نمایش می‌دهد. اطلاعات کامل در سند اصلی قابل مشاهده خواهد بود.";
+
+    }
+
+
+    else if(type === "district"){
+
+        title.textContent =
+            entity.name;
+
+        subtitle.textContent =
+            `شناسنامه دهستان · ${entity.id}`;
+
+        identity.innerHTML = `
+
+            <div class="info">
+                <label>شناسه</label>
+                <strong>${entity.id}</strong>
+            </div>
+
+            <div class="info">
+                <label>نوع</label>
+                <strong>دهستان</strong>
+            </div>
+        `;
+
+        description.textContent =
+            "اطلاعات کامل جمعیتی، اجتماعی، زیرساختی و پروژه‌های این دهستان در سند اصلی ارائه خواهد شد.";
+
+    }
+
+
+    else{
+
+        title.textContent =
+            entity.name;
+
+        subtitle.textContent =
+            `شناسه · ${entity.id}`;
+
+        description.textContent =
+            "اطلاعات کامل این Entity در سند اصلی قرار دارد.";
+
+    }
+
+
+    documentBtn.onclick = function(){
+
+        if(entity.documentUrl &&
+           entity.documentUrl !== "#"){
+
+            window.open(
+                entity.documentUrl,
+                "_blank"
+            );
+
+        }else{
+
+            alert(
+                "آدرس سند اصلی هنوز در Backend تعریف نشده است."
+            );
+
+        }
+
+    };
+
+
+    modal.classList.add("show");
+
+}
+
+
+/* ============================================================
+   CLOSE MODAL
+============================================================ */
+
+function closeModal(){
+
+    document
+        .getElementById("modal")
+        .classList
+        .remove("show");
+
+}
+
+
+/* ============================================================
+   FIT MAP
+============================================================ */
+
+function fitMap(){
+
+    const bounds = [];
+
+    STATE.data.villages.forEach(v =>
+        bounds.push([v.lat,v.lng])
+    );
+
+    STATE.data.projects.forEach(p =>
+        bounds.push([p.lat,p.lng])
+    );
+
+    STATE.data.nomads.forEach(n =>
+        bounds.push([n.lat,n.lng])
+    );
+
+    if(bounds.length){
+
+        STATE.map.fitBounds(
+            bounds,
+            {
+                padding:[30,30]
+            }
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   LAYER FILTERS
+============================================================ */
+
+document
+    .querySelectorAll("[data-layer]")
+    .forEach(input => {
+
+        input.addEventListener(
+            "change",
+            renderMapLayers
+        );
+
+    });
+
+
+document
+    .querySelectorAll("[data-status]")
+    .forEach(input => {
+
+        input.addEventListener(
+            "change",
+            function(){
+
+                STATE.filters[
+                    this.dataset.status
+                ] = this.checked;
+
+                renderMapLayers();
+
+            }
+        );
+
+    });
+
+
+/* ============================================================
+   REFRESH
+============================================================ */
+
+document
+    .getElementById("refreshBtn")
+    .addEventListener(
+        "click",
+        loadDashboard
+    );
+
+
+/* ============================================================
+   MOBILE MENU
+============================================================ */
+
+document
+    .getElementById("menuBtn")
+    ?.addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById("sidebar")
+                .classList
+                .toggle("open");
+
+        }
+    );
+
+
+/* ============================================================
+   MODAL CLICK OUTSIDE
+============================================================ */
+
+document
+    .getElementById("modal")
+    .addEventListener(
+        "click",
+        function(e){
+
+            if(e.target === this){
+                closeModal();
+            }
+
+        }
+    );
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+function setLoading(state){
+
+    document
+        .getElementById("lastUpdate")
+        .textContent =
+        state
+        ? "در حال بروزرسانی..."
+        : (
+            STATE.data?.meta?.updatedAt
+            || "اکنون"
+        );
+
+}
+
+
+/* ============================================================
+   AUTO REFRESH
+============================================================ */
+
+if(CONFIG.refreshInterval > 0){
+
+    setInterval(
+        loadDashboard,
+        CONFIG.refreshInterval
+    );
+
+}
+
+
+/* ============================================================
+   INITIALIZE
+============================================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadDashboard();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
+

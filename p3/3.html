@@ -1,0 +1,5377 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+DARALOO SMART SOCIAL ATLAS
+</title>
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+
+<style>
+
+:root {
+
+  --bg:
+    #07111f;
+
+  --bg-soft:
+    #0b1728;
+
+  --panel:
+    rgba(15, 29, 48, .88);
+
+  --panel-2:
+    rgba(20, 37, 59, .92);
+
+  --border:
+    rgba(255,255,255,.08);
+
+  --text:
+    #eef5ff;
+
+  --muted:
+    #8da1b8;
+
+  --primary:
+    #36a3ff;
+
+  --cyan:
+    #22d3ee;
+
+  --green:
+    #2dd4bf;
+
+  --yellow:
+    #fbbf24;
+
+  --red:
+    #fb7185;
+
+  --purple:
+    #a78bfa;
+
+  --orange:
+    #fb923c;
+
+  --shadow:
+    0 20px 50px rgba(0,0,0,.28);
+
+  --radius:
+    18px;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+html,
+body {
+
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  height: 100%;
+
+  font-family:
+    Vazirmatn,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(54,163,255,.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 80% 90%,
+      rgba(167,139,250,.08),
+      transparent 30%
+    ),
+    var(--bg);
+
+  color:
+    var(--text);
+
+  overflow: hidden;
+}
+
+
+button,
+input,
+select {
+
+  font-family:
+    inherit;
+}
+
+
+button {
+
+  border: 0;
+  cursor: pointer;
+}
+
+
+.app {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    310px
+    minmax(0,1fr);
+
+  grid-template-rows:
+    72px
+    minmax(0,1fr);
+
+  height:
+    100vh;
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.header {
+
+  grid-column:
+    1 / -1;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    0 22px;
+
+  border-bottom:
+    1px solid var(--border);
+
+  background:
+    rgba(7,17,31,.82);
+
+  backdrop-filter:
+    blur(20px);
+
+  z-index:
+    1000;
+}
+
+
+.brand {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    13px;
+}
+
+
+.brand-mark {
+
+  width:
+    42px;
+
+  height:
+    42px;
+
+  border-radius:
+    13px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--purple)
+    );
+
+  box-shadow:
+    0 10px 30px
+    rgba(54,163,255,.25);
+}
+
+
+.brand-title {
+
+  font-weight:
+    900;
+
+  font-size:
+    16px;
+
+  letter-spacing:
+    .4px;
+}
+
+
+.brand-subtitle {
+
+  color:
+    var(--muted);
+
+  font-size:
+    11px;
+
+  margin-top:
+    2px;
+}
+
+
+.header-actions {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    8px;
+}
+
+
+.header-btn {
+
+  width:
+    40px;
+
+  height:
+    40px;
+
+  border-radius:
+    12px;
+
+  color:
+    var(--text);
+
+  background:
+    rgba(255,255,255,.05);
+
+  border:
+    1px solid var(--border);
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  transition:
+    .2s;
+}
+
+
+.header-btn:hover {
+
+  background:
+    rgba(54,163,255,.14);
+
+  border-color:
+    rgba(54,163,255,.35);
+}
+
+
+.status-pill {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    7px;
+
+  padding:
+    8px 12px;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(45,212,191,.08);
+
+  color:
+    var(--green);
+
+  font-size:
+    11px;
+
+  border:
+    1px solid
+    rgba(45,212,191,.15);
+}
+
+
+.status-dot {
+
+  width:
+    7px;
+
+  height:
+    7px;
+
+  border-radius:
+    50%;
+
+  background:
+    currentColor;
+
+  box-shadow:
+    0 0 12px currentColor;
+}
+
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+
+.sidebar {
+
+  grid-row:
+    2;
+
+  background:
+    rgba(8,20,34,.82);
+
+  border-left:
+    1px solid var(--border);
+
+  overflow:
+    auto;
+
+  padding:
+    18px 14px;
+}
+
+
+.sidebar-section {
+
+  margin-bottom:
+    20px;
+}
+
+
+.section-title {
+
+  color:
+    var(--muted);
+
+  font-size:
+    11px;
+
+  font-weight:
+    700;
+
+  margin:
+    0 8px 9px;
+}
+
+
+.filter {
+
+  margin-bottom:
+    9px;
+}
+
+
+.filter label {
+
+  display:
+    block;
+
+  font-size:
+    11px;
+
+  color:
+    #a9bad0;
+
+  margin:
+    0 4px 5px;
+}
+
+
+.filter input,
+.filter select {
+
+  width:
+    100%;
+
+  min-height:
+    40px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    11px;
+
+  padding:
+    8px 11px;
+
+  background:
+    rgba(255,255,255,.045);
+
+  color:
+    var(--text);
+
+  outline:
+    none;
+
+  font-size:
+    12px;
+}
+
+
+.filter select option {
+
+  background:
+    #102035;
+
+  color:
+    white;
+}
+
+
+.filter input:focus,
+.filter select:focus {
+
+  border-color:
+    rgba(54,163,255,.55);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(54,163,255,.08);
+}
+
+
+.filter-actions {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    7px;
+
+  margin-top:
+    10px;
+}
+
+
+.btn {
+
+  min-height:
+    40px;
+
+  border-radius:
+    11px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    7px;
+
+  font-size:
+    11px;
+
+  font-weight:
+    700;
+
+  transition:
+    .2s;
+}
+
+
+.btn-primary {
+
+  background:
+    linear-gradient(
+      135deg,
+      #168cff,
+      #5c67ff
+    );
+
+  color:
+    white;
+}
+
+
+.btn-secondary {
+
+  background:
+    rgba(255,255,255,.05);
+
+  color:
+    var(--text);
+
+  border:
+    1px solid var(--border);
+}
+
+
+.btn:hover {
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* =====================================================
+   LAYER TOGGLES
+   ===================================================== */
+
+.layer-item {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    9px 10px;
+
+  margin-bottom:
+    5px;
+
+  border:
+    1px solid transparent;
+
+  border-radius:
+    11px;
+
+  background:
+    rgba(255,255,255,.025);
+}
+
+
+.layer-left {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    8px;
+
+  font-size:
+    11px;
+}
+
+
+.layer-icon {
+
+  width:
+    27px;
+
+  height:
+    27px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border-radius:
+    8px;
+
+  background:
+    rgba(54,163,255,.09);
+
+  color:
+    var(--primary);
+}
+
+
+.switch {
+
+  position:
+    relative;
+
+  width:
+    35px;
+
+  height:
+    19px;
+}
+
+
+.switch input {
+
+  display:
+    none;
+}
+
+
+.slider {
+
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  background:
+    #27384c;
+
+  border-radius:
+    999px;
+
+  transition:
+    .2s;
+}
+
+
+.slider:before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  width:
+    13px;
+
+  height:
+    13px;
+
+  right:
+    3px;
+
+  top:
+    3px;
+
+  border-radius:
+    50%;
+
+  background:
+    white;
+
+  transition:
+    .2s;
+}
+
+
+.switch input:checked + .slider {
+
+  background:
+    var(--primary);
+}
+
+
+.switch input:checked + .slider:before {
+
+  transform:
+    translateX(-16px);
+}
+
+
+/* =====================================================
+   MAIN
+   ===================================================== */
+
+.main {
+
+  grid-column:
+    2;
+
+  grid-row:
+    2;
+
+  overflow:
+    auto;
+
+  padding:
+    18px;
+
+  min-width:
+    0;
+}
+
+
+.dashboard-grid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(12, minmax(0,1fr));
+
+  gap:
+    14px;
+}
+
+
+/* =====================================================
+   KPI
+   ===================================================== */
+
+.kpi {
+
+  grid-column:
+    span 3;
+
+  min-height:
+    128px;
+
+  padding:
+    17px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20,37,59,.92),
+      rgba(10,24,41,.86)
+    );
+
+  box-shadow:
+    var(--shadow);
+
+  position:
+    relative;
+
+  overflow:
+    hidden;
+}
+
+
+.kpi:after {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  width:
+    100px;
+
+  height:
+    100px;
+
+  left:
+    -45px;
+
+  bottom:
+    -45px;
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(54,163,255,.08);
+}
+
+
+.kpi-top {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+}
+
+
+.kpi-icon {
+
+  width:
+    37px;
+
+  height:
+    37px;
+
+  border-radius:
+    11px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  background:
+    rgba(54,163,255,.10);
+
+  color:
+    var(--primary);
+}
+
+
+.kpi-label {
+
+  font-size:
+    11px;
+
+  color:
+    var(--muted);
+}
+
+
+.kpi-value {
+
+  margin-top:
+    12px;
+
+  font-size:
+    27px;
+
+  font-weight:
+    900;
+
+  direction:
+    ltr;
+
+  text-align:
+    right;
+}
+
+
+.kpi-unit {
+
+  font-size:
+    10px;
+
+  color:
+    var(--muted);
+
+  margin-right:
+    5px;
+}
+
+
+/* =====================================================
+   PANELS
+   ===================================================== */
+
+.panel {
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    var(--radius);
+
+  background:
+    rgba(13,28,47,.82);
+
+  box-shadow:
+    var(--shadow);
+
+  overflow:
+    hidden;
+}
+
+
+.panel-header {
+
+  min-height:
+    56px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    0 15px;
+
+  border-bottom:
+    1px solid var(--border);
+}
+
+
+.panel-title {
+
+  font-size:
+    13px;
+
+  font-weight:
+    800;
+}
+
+
+.panel-subtitle {
+
+  font-size:
+    10px;
+
+  color:
+    var(--muted);
+
+  margin-top:
+    2px;
+}
+
+
+.panel-body {
+
+  padding:
+    14px;
+}
+
+
+/* =====================================================
+   MAP
+   ===================================================== */
+
+.map-panel {
+
+  grid-column:
+    span 8;
+
+  height:
+    570px;
+}
+
+
+.map-container {
+
+  height:
+    calc(100% - 56px);
+
+  position:
+    relative;
+}
+
+
+#map {
+
+  width:
+    100%;
+
+  height:
+    100%;
+}
+
+
+.leaflet-container {
+
+  background:
+    #081522;
+
+  font-family:
+    Vazirmatn,
+    sans-serif;
+}
+
+
+.leaflet-control-zoom a {
+
+  background:
+    #102238 !important;
+
+  color:
+    white !important;
+
+  border-color:
+    rgba(255,255,255,.08) !important;
+}
+
+
+.map-overlay {
+
+  position:
+    absolute;
+
+  top:
+    12px;
+
+  right:
+    12px;
+
+  z-index:
+    500;
+
+  padding:
+    9px 12px;
+
+  border:
+    1px solid rgba(255,255,255,.10);
+
+  background:
+    rgba(7,17,31,.82);
+
+  backdrop-filter:
+    blur(12px);
+
+  border-radius:
+    11px;
+
+  font-size:
+    10px;
+}
+
+
+.map-count {
+
+  color:
+    var(--primary);
+
+  font-weight:
+    800;
+}
+
+
+/* =====================================================
+   INTELLIGENCE PANEL
+   ===================================================== */
+
+.intelligence-panel {
+
+  grid-column:
+    span 4;
+
+  height:
+    570px;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+}
+
+
+.intelligence-body {
+
+  overflow:
+    auto;
+
+  padding:
+    13px;
+}
+
+
+.signal {
+
+  padding:
+    12px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    13px;
+
+  background:
+    rgba(255,255,255,.025);
+
+  margin-bottom:
+    8px;
+}
+
+
+.signal-top {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+}
+
+
+.signal-title {
+
+  font-size:
+    11px;
+
+  font-weight:
+    700;
+}
+
+
+.signal-value {
+
+  font-size:
+    16px;
+
+  font-weight:
+    900;
+
+  color:
+    var(--primary);
+}
+
+
+.signal-description {
+
+  margin-top:
+    6px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    10px;
+
+  line-height:
+    1.7;
+}
+
+
+.alert {
+
+  display:
+    flex;
+
+  gap:
+    10px;
+
+  padding:
+    11px;
+
+  margin-bottom:
+    7px;
+
+  border-radius:
+    12px;
+
+  border:
+    1px solid var(--border);
+
+  background:
+    rgba(255,255,255,.025);
+}
+
+
+.alert-icon {
+
+  width:
+    30px;
+
+  height:
+    30px;
+
+  flex:
+    0 0 30px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border-radius:
+    9px;
+
+  color:
+    var(--yellow);
+
+  background:
+    rgba(251,191,36,.08);
+}
+
+
+.alert.high .alert-icon {
+
+  color:
+    var(--red);
+
+  background:
+    rgba(251,113,133,.08);
+}
+
+
+.alert-title {
+
+  font-size:
+    11px;
+
+  font-weight:
+    700;
+}
+
+
+.alert-message {
+
+  font-size:
+    10px;
+
+  color:
+    var(--muted);
+
+  margin-top:
+    3px;
+}
+
+
+/* =====================================================
+   CHARTS
+   ===================================================== */
+
+.chart-panel {
+
+  grid-column:
+    span 4;
+
+  min-height:
+    330px;
+}
+
+
+.chart-container {
+
+  height:
+    255px;
+
+  padding:
+    10px;
+}
+
+
+/* =====================================================
+   TABLE
+   ===================================================== */
+
+.table-panel {
+
+  grid-column:
+    span 12;
+}
+
+
+.table-wrapper {
+
+  overflow:
+    auto;
+}
+
+
+table {
+
+  width:
+    100%;
+
+  border-collapse:
+    collapse;
+
+  font-size:
+    10px;
+}
+
+
+th {
+
+  text-align:
+    right;
+
+  color:
+    var(--muted);
+
+  font-weight:
+    600;
+
+  padding:
+    10px;
+
+  border-bottom:
+    1px solid var(--border);
+
+  white-space:
+    nowrap;
+}
+
+
+td {
+
+  padding:
+    10px;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.045);
+
+  white-space:
+    nowrap;
+}
+
+
+tr:hover td {
+
+  background:
+    rgba(54,163,255,.035);
+}
+
+
+.profile-btn {
+
+  padding:
+    5px 9px;
+
+  border-radius:
+    7px;
+
+  background:
+    rgba(54,163,255,.10);
+
+  color:
+    var(--primary);
+
+  font-size:
+    10px;
+}
+
+
+/* =====================================================
+   DRAWER
+   ===================================================== */
+
+.drawer {
+
+  position:
+    fixed;
+
+  top:
+    0;
+
+  left:
+    -520px;
+
+  width:
+    500px;
+
+  max-width:
+    94vw;
+
+  height:
+    100vh;
+
+  background:
+    #0a1829;
+
+  border-right:
+    1px solid var(--border);
+
+  z-index:
+    3000;
+
+  transition:
+    .28s ease;
+
+  box-shadow:
+    20px 0 70px
+    rgba(0,0,0,.45);
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+}
+
+
+.drawer.open {
+
+  left:
+    0;
+}
+
+
+.drawer-header {
+
+  min-height:
+    72px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    0 18px;
+
+  border-bottom:
+    1px solid var(--border);
+}
+
+
+.drawer-title {
+
+  font-size:
+    15px;
+
+  font-weight:
+    900;
+}
+
+
+.drawer-body {
+
+  flex:
+    1;
+
+  overflow:
+    auto;
+
+  padding:
+    17px;
+}
+
+
+.profile-section {
+
+  margin-bottom:
+    18px;
+}
+
+
+.profile-section-title {
+
+  font-size:
+    11px;
+
+  font-weight:
+    800;
+
+  color:
+    var(--primary);
+
+  margin-bottom:
+    8px;
+}
+
+
+.profile-grid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    7px;
+}
+
+
+.profile-field {
+
+  padding:
+    9px;
+
+  border-radius:
+    9px;
+
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid rgba(255,255,255,.045);
+}
+
+
+.profile-key {
+
+  color:
+    var(--muted);
+
+  font-size:
+    9px;
+}
+
+
+.profile-value {
+
+  margin-top:
+    3px;
+
+  font-size:
+    10px;
+
+  line-height:
+    1.6;
+
+  word-break:
+    break-word;
+}
+
+
+/* =====================================================
+   LOADING
+   ===================================================== */
+
+.loading {
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  z-index:
+    5000;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  background:
+    rgba(4,10,18,.88);
+
+  backdrop-filter:
+    blur(12px);
+}
+
+
+.loading-card {
+
+  width:
+    300px;
+
+  padding:
+    30px;
+
+  text-align:
+    center;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    20px;
+
+  background:
+    var(--panel-2);
+
+  box-shadow:
+    var(--shadow);
+}
+
+
+.spinner {
+
+  width:
+    42px;
+
+  height:
+    42px;
+
+  margin:
+    auto auto 14px;
+
+  border:
+    3px solid rgba(255,255,255,.10);
+
+  border-top-color:
+    var(--primary);
+
+  border-radius:
+    50%;
+
+  animation:
+    spin .8s linear infinite;
+}
+
+
+@keyframes spin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+
+.hidden {
+
+  display:
+    none !important;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media(max-width:1200px) {
+
+  .kpi {
+    grid-column:
+      span 6;
+  }
+
+  .map-panel {
+    grid-column:
+      span 12;
+  }
+
+  .intelligence-panel {
+    grid-column:
+      span 12;
+  }
+
+  .chart-panel {
+    grid-column:
+      span 6;
+  }
+}
+
+
+@media(max-width:900px) {
+
+  .app {
+
+    grid-template-columns:
+      1fr;
+
+    grid-template-rows:
+      68px
+      auto;
+  }
+
+  .sidebar {
+
+    position:
+      fixed;
+
+    right:
+      -320px;
+
+    top:
+      68px;
+
+    width:
+      310px;
+
+    height:
+      calc(100vh - 68px);
+
+    z-index:
+      2000;
+
+    transition:
+      .25s;
+  }
+
+  .sidebar.open {
+    right:
+      0;
+  }
+
+  .main {
+
+    grid-column:
+      1;
+  }
+
+  .kpi {
+    grid-column:
+      span 12;
+  }
+
+  .chart-panel {
+    grid-column:
+      span 12;
+  }
+
+  .map-panel {
+    height:
+      500px;
+  }
+}
+
+
+@media(max-width:600px) {
+
+  .brand-subtitle {
+    display:
+      none;
+  }
+
+  .status-pill {
+    display:
+      none;
+  }
+
+  .main {
+    padding:
+      10px;
+  }
+
+  .dashboard-grid {
+    gap:
+      9px;
+  }
+
+  .profile-grid {
+    grid-template-columns:
+      1fr;
+  }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="loading" class="loading">
+
+  <div class="loading-card">
+
+    <div class="spinner"></div>
+
+    <strong>
+      در حال دریافت اطلس هوشمند...
+    </strong>
+
+    <div
+      id="loadingText"
+      style="
+        margin-top:8px;
+        color:#8da1b8;
+        font-size:11px;
+      "
+    >
+      اتصال به Google Apps Script
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="app">
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="header">
+
+  <div class="brand">
+
+    <div class="brand-mark">
+
+      <i data-lucide="map"></i>
+
+    </div>
+
+    <div>
+
+      <div class="brand-title">
+        DARALOO SMART SOCIAL ATLAS
+      </div>
+
+      <div class="brand-subtitle">
+        Intelligent Social Responsibility & Regional Intelligence Platform
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="header-actions">
+
+    <div class="status-pill">
+
+      <span class="status-dot"></span>
+
+      <span id="connectionStatus">
+        در حال اتصال
+      </span>
+
+    </div>
+
+
+    <button
+      class="header-btn"
+      id="refreshBtn"
+      title="Refresh"
+    >
+
+      <i data-lucide="refresh-cw"></i>
+
+    </button>
+
+
+    <button
+      class="header-btn"
+      id="mobileMenuBtn"
+    >
+
+      <i data-lucide="menu"></i>
+
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- =====================================================
+     SIDEBAR
+     ===================================================== -->
+
+<aside
+  class="sidebar"
+  id="sidebar"
+>
+
+
+<div class="sidebar-section">
+
+  <div class="section-title">
+    جستجو و فیلتر هوشمند
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      جستجوی سراسری
+    </label>
+
+    <input
+      id="keyword"
+      type="text"
+      placeholder="نام پروژه، منطقه، زیرساخت..."
+    >
+
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      شهرستان
+    </label>
+
+    <select
+      id="districtFilter"
+    >
+
+      <option value="">
+        همه شهرستان‌ها
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      دهستان
+    </label>
+
+    <select
+      id="dehestanFilter"
+    >
+
+      <option value="">
+        همه دهستان‌ها
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      روستا
+    </label>
+
+    <select
+      id="villageFilter"
+    >
+
+      <option value="">
+        همه روستاها
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      وضعیت
+    </label>
+
+    <select
+      id="statusFilter"
+    >
+
+      <option value="">
+        همه وضعیت‌ها
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      اولویت
+    </label>
+
+    <select
+      id="priorityFilter"
+    >
+
+      <option value="">
+        همه اولویت‌ها
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      دسته‌بندی
+    </label>
+
+    <select
+      id="categoryFilter"
+    >
+
+      <option value="">
+        همه دسته‌ها
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="filter">
+
+    <label>
+      نوع زیرساخت
+    </label>
+
+    <select
+      id="infrastructureFilter"
+    >
+
+      <option value="">
+        همه زیرساخت‌ها
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="filter-actions">
+
+    <button
+      class="btn btn-primary"
+      id="applyFilters"
+    >
+
+      <i data-lucide="filter"></i>
+
+      اعمال فیلتر
+
+    </button>
+
+
+    <button
+      class="btn btn-secondary"
+      id="clearFilters"
+    >
+
+      <i data-lucide="rotate-ccw"></i>
+
+      پاک‌سازی
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="sidebar-section">
+
+  <div class="section-title">
+    لایه‌های GIS
+  </div>
+
+
+  <div id="layerControls"></div>
+
+</div>
+
+
+<div class="sidebar-section">
+
+  <div class="section-title">
+    وضعیت سیستم
+  </div>
+
+
+  <div
+    style="
+      padding:12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.025);
+      border:1px solid var(--border);
+      font-size:10px;
+      line-height:2;
+      color:var(--muted);
+    "
+  >
+
+    آخرین بروزرسانی:
+
+    <strong
+      id="updatedAt"
+      style="color:white"
+    >
+      —
+    </strong>
+
+    <br>
+
+    زمان پاسخ:
+
+    <strong
+      id="responseTime"
+      style="color:white"
+    >
+      —
+    </strong>
+
+    <br>
+
+    رکوردهای روی نقشه:
+
+    <strong
+      id="mapRecordCount"
+      style="color:white"
+    >
+      —
+    </strong>
+
+  </div>
+
+</div>
+
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="main">
+
+
+<div class="dashboard-grid">
+
+
+<!-- KPI -->
+
+<div id="kpiContainer"
+     style="display:contents">
+</div>
+
+
+<!-- MAP -->
+
+<section class="panel map-panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <div class="panel-title">
+        اطلس هوشمند منطقه‌ای
+      </div>
+
+      <div class="panel-subtitle">
+        تمام موجودیت‌های جغرافیایی فیلترشده
+      </div>
+
+    </div>
+
+    <div
+      style="
+        display:flex;
+        gap:6px;
+      "
+    >
+
+      <button
+        class="header-btn"
+        id="fitMapBtn"
+      >
+
+        <i data-lucide="maximize"></i>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="map-container">
+
+    <div class="map-overlay">
+
+      <span>
+        رکوردهای نمایش داده‌شده:
+      </span>
+
+      <span
+        id="mapOverlayCount"
+        class="map-count"
+      >
+        0
+      </span>
+
+    </div>
+
+
+    <div id="map"></div>
+
+  </div>
+
+</section>
+
+
+<!-- INTELLIGENCE -->
+
+<section class="panel intelligence-panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <div class="panel-title">
+        مرکز هوشمندی تصمیم
+      </div>
+
+      <div class="panel-subtitle">
+        Decision Intelligence Center
+      </div>
+
+    </div>
+
+    <i
+      data-lucide="brain-circuit"
+      style="color:var(--purple)"
+    ></i>
+
+  </div>
+
+
+  <div
+    class="intelligence-body"
+    id="intelligenceBody"
+  >
+
+  </div>
+
+</section>
+
+
+<!-- CHART 1 -->
+
+<section class="panel chart-panel">
+
+  <div class="panel-header">
+
+    <div class="panel-title">
+      وضعیت پروژه‌ها
+    </div>
+
+  </div>
+
+  <div class="chart-container">
+
+    <canvas id="projectStatusChart"></canvas>
+
+  </div>
+
+</section>
+
+
+<!-- CHART 2 -->
+
+<section class="panel chart-panel">
+
+  <div class="panel-header">
+
+    <div class="panel-title">
+      توزیع پروژه‌ها
+    </div>
+
+  </div>
+
+  <div class="chart-container">
+
+    <canvas id="projectCategoryChart"></canvas>
+
+  </div>
+
+</section>
+
+
+<!-- CHART 3 -->
+
+<section class="panel chart-panel">
+
+  <div class="panel-header">
+
+    <div class="panel-title">
+      زیرساخت
+    </div>
+
+  </div>
+
+  <div class="chart-container">
+
+    <canvas id="infrastructureChart"></canvas>
+
+  </div>
+
+</section>
+
+
+<!-- TABLE -->
+
+<section class="panel table-panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <div class="panel-title">
+        موجودیت‌ها
+      </div>
+
+      <div class="panel-subtitle">
+        مشاهده شناسنامه کامل هر رکورد
+      </div>
+
+    </div>
+
+    <div
+      id="tableCount"
+      style="
+        color:var(--muted);
+        font-size:10px;
+      "
+    >
+      0 رکورد
+    </div>
+
+  </div>
+
+
+  <div class="table-wrapper">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>
+            نوع
+          </th>
+
+          <th>
+            عنوان
+          </th>
+
+          <th>
+            شهرستان
+          </th>
+
+          <th>
+            دهستان
+          </th>
+
+          <th>
+            وضعیت
+          </th>
+
+          <th>
+            اولویت
+          </th>
+
+          <th>
+            عملیات
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody id="recordsTable">
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     PROFILE DRAWER
+     ===================================================== -->
+
+<div
+  class="drawer"
+  id="profileDrawer"
+>
+
+  <div class="drawer-header">
+
+    <div>
+
+      <div class="drawer-title">
+        شناسنامه موجودیت
+      </div>
+
+      <div
+        id="drawerSubtitle"
+        style="
+          color:var(--muted);
+          font-size:10px;
+          margin-top:3px;
+        "
+      >
+      </div>
+
+    </div>
+
+
+    <button
+      class="header-btn"
+      id="closeDrawer"
+    >
+
+      <i data-lucide="x"></i>
+
+    </button>
+
+  </div>
+
+
+  <div
+    class="drawer-body"
+    id="drawerBody"
+  >
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+const CONFIG = {
+
+  gasUrl: "https://script.google.com/macros/s/AKfycbyIoSPXveCldX_uivjmH7Y47pWKcRoN5pc8-qR3hRh7a_VHJqPS9XJ-pF6rJkZ9LtjW/exec",
+
+  requestTimeout: 30000,
+
+  refreshInterval: 0
+
+};
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+const STATE = {
+
+  data:
+    null,
+
+  map:
+    null,
+
+  geoLayer:
+    null,
+
+  charts:
+    {},
+
+  layers:
+    {},
+
+  filters:
+    {},
+
+  currentRecord:
+    null,
+
+  requestController:
+    null
+};
+
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  function() {
+
+    lucide.createIcons();
+
+    initializeMap();
+
+    initializeEvents();
+
+    loadDashboard();
+
+  }
+);
+
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+function initializeMap() {
+
+  STATE.map =
+    L.map(
+      'map',
+      {
+        zoomControl:
+          true,
+
+        attributionControl:
+          true
+      }
+    )
+    .setView(
+      [30,57],
+      8
+    );
+
+
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      maxZoom:
+        19,
+
+      attribution:
+        '&copy; OpenStreetMap'
+    }
+  ).addTo(
+    STATE.map
+  );
+}
+
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+
+function initializeEvents() {
+
+  document
+    .getElementById('refreshBtn')
+    .addEventListener(
+      'click',
+      loadDashboard
+    );
+
+
+  document
+    .getElementById('applyFilters')
+    .addEventListener(
+      'click',
+      loadDashboard
+    );
+
+
+  document
+    .getElementById('clearFilters')
+    .addEventListener(
+      'click',
+      function() {
+
+        document
+          .querySelectorAll(
+            '.sidebar input, .sidebar select'
+          )
+          .forEach(
+            function(element) {
+
+              if (
+                element.id ===
+                'keyword'
+              ) {
+
+                element.value =
+                  '';
+
+              } else {
+
+                element.value =
+                  '';
+
+              }
+            }
+          );
+
+        loadDashboard();
+
+      }
+    );
+
+
+  document
+    .getElementById('fitMapBtn')
+    .addEventListener(
+      'click',
+      fitMap
+    );
+
+
+  document
+    .getElementById('closeDrawer')
+    .addEventListener(
+      'click',
+      closeProfile
+    );
+
+
+  document
+    .getElementById('mobileMenuBtn')
+    .addEventListener(
+      'click',
+      function() {
+
+        document
+          .getElementById('sidebar')
+          .classList
+          .toggle('open');
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD DASHBOARD
+   ========================================================= */
+
+async function loadDashboard() {
+
+  showLoading(
+    'در حال دریافت داده‌های تحلیل‌شده...'
+  );
+
+
+  const started =
+    performance.now();
+
+
+  try {
+
+    const params =
+      collectFilters();
+
+
+    const query =
+      new URLSearchParams();
+
+
+    query.set(
+      'action',
+      'dashboard'
+    );
+
+
+    if (
+      params.keyword
+    ) {
+
+      query.set(
+        'keyword',
+        params.keyword
+      );
+
+    }
+
+
+    [
+      'districts',
+      'dehestans',
+      'villages',
+      'statuses',
+      'priorities',
+      'categories',
+      'infrastructureTypes'
+    ]
+    .forEach(
+      function(key) {
+
+        if (
+          params[key]
+        ) {
+
+          query.set(
+            key,
+            params[key]
+          );
+
+        }
+
+      }
+    );
+
+
+    const url =
+      CONFIG.gasUrl +
+      '?' +
+      query.toString();
+
+
+    if (
+      STATE.requestController
+    ) {
+
+      STATE.requestController.abort();
+
+    }
+
+
+    STATE.requestController =
+      new AbortController();
+
+
+    const timeout =
+      setTimeout(
+        function() {
+
+          STATE.requestController.abort();
+
+        },
+        CONFIG.requestTimeout
+      );
+
+
+    const response =
+      await fetch(
+        url,
+        {
+          method:
+            'GET',
+
+          signal:
+            STATE.requestController.signal,
+
+          cache:
+            'no-store'
+        }
+      );
+
+
+    clearTimeout(
+      timeout
+    );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        'HTTP ' +
+        response.status
+      );
+
+    }
+
+
+    const json =
+      await response.json();
+
+
+    if (
+      !json.success
+    ) {
+
+      throw new Error(
+        json.error &&
+        json.error.message
+          ? json.error.message
+          : 'خطا در API'
+      );
+
+    }
+
+
+    STATE.data =
+      json;
+
+
+    const elapsed =
+      Math.round(
+        performance.now() -
+        started
+      );
+
+
+    renderDashboard(
+      json,
+      elapsed
+    );
+
+
+    setConnection(
+      true
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    setConnection(
+      false
+    );
+
+    showError(
+      error.message ||
+      'خطا در دریافت اطلاعات'
+    );
+
+  } finally {
+
+    hideLoading();
+
+  }
+
+}
+
+
+/* =========================================================
+   COLLECT FILTERS
+   ========================================================= */
+
+function collectFilters() {
+
+  return {
+
+    keyword:
+      valueOf(
+        'keyword'
+      ),
+
+    districts:
+      valueOf(
+        'districtFilter'
+      ),
+
+    dehestans:
+      valueOf(
+        'dehestanFilter'
+      ),
+
+    villages:
+      valueOf(
+        'villageFilter'
+      ),
+
+    statuses:
+      valueOf(
+        'statusFilter'
+      ),
+
+    priorities:
+      valueOf(
+        'priorityFilter'
+      ),
+
+    categories:
+      valueOf(
+        'categoryFilter'
+      ),
+
+    infrastructureTypes:
+      valueOf(
+        'infrastructureFilter'
+      )
+  };
+}
+
+
+function valueOf(id) {
+
+  return document
+    .getElementById(id)
+    .value;
+}
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function renderDashboard(
+  data,
+  responseTime
+) {
+
+  renderKPIs(
+    data.kpis || []
+  );
+
+  renderFilters(
+    data.filters || {}
+  );
+
+  renderLayers(
+    data.layers || []
+  );
+
+  renderMap(
+    data.map || {}
+  );
+
+  renderIntelligence(
+    data.summary || {},
+    data.alerts || []
+  );
+
+  renderCharts(
+    data.analytics || {}
+  );
+
+  renderRecordsTable(
+    data.records || {}
+  );
+
+
+  document
+    .getElementById(
+      'updatedAt'
+    )
+    .textContent =
+      formatDateTime(
+        data.meta &&
+        data.meta.generatedAt
+      );
+
+
+  document
+    .getElementById(
+      'responseTime'
+    )
+    .textContent =
+      responseTime +
+      ' ms';
+
+}
+
+
+/* =========================================================
+   KPI
+   ========================================================= */
+
+function renderKPIs(
+  kpis
+) {
+
+  const container =
+    document.getElementById(
+      'kpiContainer'
+    );
+
+
+  container.innerHTML =
+    kpis.map(
+      function(kpi) {
+
+        return `
+
+          <div class="kpi">
+
+            <div class="kpi-top">
+
+              <div class="kpi-label">
+                ${escapeHtml(
+                  kpi.title || ''
+                )}
+              </div>
+
+              <div class="kpi-icon">
+
+                <i
+                  data-lucide="${
+                    escapeHtml(
+                      kpi.icon || 'activity'
+                    )
+                  }"
+                ></i>
+
+              </div>
+
+            </div>
+
+            <div class="kpi-value">
+
+              ${formatNumber(
+                kpi.value
+              )}
+
+              <span class="kpi-unit">
+                ${escapeHtml(
+                  kpi.unit || ''
+                )}
+              </span>
+
+            </div>
+
+          </div>
+
+        `;
+      }
+    )
+    .join('');
+
+
+  lucide.createIcons();
+
+}
+
+
+/* =========================================================
+   FILTER OPTIONS
+   ========================================================= */
+
+function renderFilters(
+  filters
+) {
+
+  fillSelect(
+    'districtFilter',
+    filters.districts
+  );
+
+  fillSelect(
+    'dehestanFilter',
+    filters.dehestans
+  );
+
+  fillSelect(
+    'villageFilter',
+    filters.villages
+  );
+
+  fillSelect(
+    'statusFilter',
+    filters.statuses
+  );
+
+  fillSelect(
+    'priorityFilter',
+    filters.priorities
+  );
+
+  fillSelect(
+    'categoryFilter',
+    filters.categories
+  );
+
+  fillSelect(
+    'infrastructureFilter',
+    filters.infrastructureTypes
+  );
+
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+function fillSelect(
+  id,
+  items
+) {
+
+  const select =
+    document.getElementById(
+      id
+    );
+
+
+  const current =
+    select.value;
+
+
+  const options =
+    Array.isArray(items)
+      ? items
+      : [];
+
+
+  select.innerHTML =
+    '<option value="">همه</option>' +
+    options
+      .map(
+        function(item) {
+
+          return `
+            <option value="${
+              escapeAttribute(
+                item.value
+              )
+            }">
+              ${
+                escapeHtml(
+                  item.label
+                )
+              }
+            </option>
+          `;
+        }
+      )
+      .join('');
+
+
+  if (
+    current &&
+    Array.from(
+      select.options
+    )
+    .some(
+      option =>
+        option.value ===
+        current
+    )
+  ) {
+
+    select.value =
+      current;
+
+  }
+
+}
+
+
+/* =========================================================
+   LAYERS
+   ========================================================= */
+
+function renderLayers(
+  layers
+) {
+
+  const container =
+    document.getElementById(
+      'layerControls'
+    );
+
+
+  container.innerHTML =
+    layers.map(
+      function(layer) {
+
+        return `
+
+          <div class="layer-item">
+
+            <div class="layer-left">
+
+              <div class="layer-icon">
+
+                <i
+                  data-lucide="${
+                    escapeHtml(
+                      layer.icon ||
+                      'layers'
+                    )
+                  }"
+                ></i>
+
+              </div>
+
+              ${
+                escapeHtml(
+                  layer.title
+                )
+              }
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                type="checkbox"
+                data-layer="${
+                  escapeAttribute(
+                    layer.id
+                  )
+                }"
+                ${
+                  layer.visible
+                    ? 'checked'
+                    : ''
+                }
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+        `;
+
+      }
+    )
+    .join('');
+
+
+  container
+    .querySelectorAll(
+      'input[data-layer]'
+    )
+    .forEach(
+      function(input) {
+
+        input.addEventListener(
+          'change',
+          function() {
+
+            refreshMapLayers();
+
+          }
+        );
+
+      }
+    );
+
+
+  lucide.createIcons();
+
+}
+
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+function renderMap(
+  mapData
+) {
+
+  clearMap();
+
+
+  if (
+    mapData.center
+  ) {
+
+    STATE.map.setView(
+      mapData.center,
+      mapData.zoom || 8
+    );
+
+  }
+
+
+  const features =
+    mapData.features || [];
+
+
+  STATE.geoLayer =
+    L.geoJSON(
+      {
+        type:
+          'FeatureCollection',
+
+        features:
+          features
+      },
+      {
+
+        style:
+          featureStyle,
+
+        pointToLayer:
+          pointToLayer,
+
+        onEachFeature:
+          onEachFeature
+
+      }
+    )
+    .addTo(
+      STATE.map
+    );
+
+
+  document
+    .getElementById(
+      'mapRecordCount'
+    )
+    .textContent =
+      formatNumber(
+        features.length
+      );
+
+
+  document
+    .getElementById(
+      'mapOverlayCount'
+    )
+    .textContent =
+      formatNumber(
+        features.length
+      );
+
+
+  fitMap();
+
+}
+
+
+/* =========================================================
+   MAP STYLE
+   ========================================================= */
+
+function featureStyle(
+  feature
+) {
+
+  const type =
+    feature.properties &&
+    feature.properties.recordType;
+
+
+  if (
+    type === 'zone'
+  ) {
+
+    return {
+
+      color:
+        '#36a3ff',
+
+      weight:
+        2,
+
+      fillOpacity:
+        .10
+    };
+
+  }
+
+
+  if (
+    type === 'gis'
+  ) {
+
+    return {
+
+      color:
+        '#a78bfa',
+
+      weight:
+        2,
+
+      fillOpacity:
+        .08
+    };
+
+  }
+
+
+  return {
+
+    color:
+      '#22d3ee',
+
+    weight:
+      2,
+
+    fillOpacity:
+      .08
+  };
+}
+
+
+/* =========================================================
+   POINT LAYER
+   ========================================================= */
+
+function pointToLayer(
+  feature,
+  latlng
+) {
+
+  const type =
+    feature.properties &&
+    feature.properties.recordType;
+
+
+  let color =
+    '#36a3ff';
+
+
+  if (
+    type === 'project'
+  ) {
+    color =
+      '#22d3ee';
+  }
+
+  if (
+    type === 'infrastructure'
+  ) {
+    color =
+      '#fbbf24';
+  }
+
+  if (
+    type === 'population'
+  ) {
+    color =
+      '#a78bfa';
+  }
+
+  if (
+    type === 'indicators'
+  ) {
+    color =
+      '#2dd4bf';
+  }
+
+
+  return L.circleMarker(
+    latlng,
+    {
+
+      radius:
+        7,
+
+      color:
+        color,
+
+      weight:
+        2,
+
+      fillColor:
+        color,
+
+      fillOpacity:
+        .78
+    }
+  );
+}
+
+
+/* =========================================================
+   MAP FEATURE
+   ========================================================= */
+
+function onEachFeature(
+  feature,
+  layer
+) {
+
+  const p =
+    feature.properties || {};
+
+
+  const popup =
+    `
+
+      <div
+        style="
+          min-width:230px;
+          direction:rtl;
+          font-family:Vazirmatn,sans-serif;
+        "
+      >
+
+        <div
+          style="
+            font-size:13px;
+            font-weight:800;
+            margin-bottom:7px;
+          "
+        >
+          ${escapeHtml(
+            p.title || 'بدون عنوان'
+          )}
+        </div>
+
+        <div
+          style="
+            font-size:10px;
+            line-height:2;
+            color:#64748b;
+          "
+        >
+
+          نوع:
+          ${escapeHtml(
+            p.recordType || ''
+          )}
+
+          <br>
+
+          شهرستان:
+          ${escapeHtml(
+            p.districtName || '—'
+          )}
+
+          <br>
+
+          وضعیت:
+          ${escapeHtml(
+            p.status || '—'
+          )}
+
+        </div>
+
+
+        <button
+          onclick="openMapProfile(
+            '${escapeAttribute(
+              p.recordId
+            )}',
+            '${escapeAttribute(
+              p.recordType
+            )}'
+          )"
+          style="
+            margin-top:8px;
+            width:100%;
+            padding:8px;
+            border:0;
+            border-radius:8px;
+            background:#168cff;
+            color:white;
+            cursor:pointer;
+            font-family:inherit;
+          "
+        >
+          مشاهده شناسنامه
+        </button>
+
+      </div>
+
+    `;
+
+
+  layer.bindPopup(
+    popup
+  );
+
+
+  layer.on(
+    'click',
+    function() {
+
+      STATE.currentRecord = {
+        recordId:
+          p.recordId,
+
+        recordType:
+          p.recordType
+      };
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MAP PROFILE
+   ========================================================= */
+
+function openMapProfile(
+  recordId,
+  recordType
+) {
+
+  const records =
+    STATE.data &&
+    STATE.data.records
+      ? STATE.data.records[
+          recordType + 's'
+        ]
+      : [];
+
+
+  let record =
+    null;
+
+
+  if (
+    Array.isArray(records)
+  ) {
+
+    record =
+      records.find(
+        function(item) {
+
+          return String(
+            item.projectId ||
+            item.zoneId ||
+            item.logisticsId ||
+            item.gisId ||
+            item.infrastructureId ||
+            item.populationId ||
+            item.indicatorId ||
+            item.sourceId ||
+            item.recordId ||
+            ''
+          ) ===
+          String(
+            recordId
+          );
+
+        }
+      );
+
+  }
+
+
+  if (record) {
+
+    openProfile(
+      record,
+      recordType
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CLEAR MAP
+   ========================================================= */
+
+function clearMap() {
+
+  if (
+    STATE.geoLayer
+  ) {
+
+    STATE.map.removeLayer(
+      STATE.geoLayer
+    );
+
+    STATE.geoLayer =
+      null;
+
+  }
+
+}
+
+
+/* =========================================================
+   FIT MAP
+   ========================================================= */
+
+function fitMap() {
+
+  if (
+    STATE.geoLayer &&
+    STATE.geoLayer.getBounds &&
+    STATE.geoLayer.getLayers().length
+  ) {
+
+    try {
+
+      STATE.map.fitBounds(
+        STATE.geoLayer.getBounds(),
+        {
+          padding:
+            [30,30]
+        }
+      );
+
+    } catch (error) {}
+
+  }
+
+}
+
+
+/* =========================================================
+   MAP LAYER REFRESH
+   ========================================================= */
+
+function refreshMapLayers() {
+
+  const selected =
+    [];
+
+
+  document
+    .querySelectorAll(
+      'input[data-layer]:checked'
+    )
+    .forEach(
+      function(input) {
+
+        selected.push(
+          input.dataset.layer
+        );
+
+      }
+    );
+
+
+  if (
+    !STATE.data
+  ) {
+    return;
+  }
+
+
+  const allFeatures =
+    STATE.data.map &&
+    STATE.data.map.features
+      ? STATE.data.map.features
+      : [];
+
+
+  const filtered =
+    allFeatures.filter(
+      function(feature) {
+
+        return selected.indexOf(
+          feature.properties.recordType
+        ) !== -1;
+
+      }
+    );
+
+
+  clearMap();
+
+
+  STATE.geoLayer =
+    L.geoJSON(
+      {
+        type:
+          'FeatureCollection',
+
+        features:
+          filtered
+      },
+      {
+
+        style:
+          featureStyle,
+
+        pointToLayer:
+          pointToLayer,
+
+        onEachFeature:
+          onEachFeature
+      }
+    )
+    .addTo(
+      STATE.map
+    );
+
+
+  document
+    .getElementById(
+      'mapOverlayCount'
+    )
+    .textContent =
+      formatNumber(
+        filtered.length
+      );
+
+
+  fitMap();
+
+}
+
+
+/* =========================================================
+   INTELLIGENCE
+   ========================================================= */
+
+function renderIntelligence(
+  summary,
+  alerts
+) {
+
+  const container =
+    document.getElementById(
+      'intelligenceBody'
+    );
+
+
+  const signals =
+    summary.decisionSignals || [];
+
+
+  let html =
+    '';
+
+
+  signals.forEach(
+    function(signal) {
+
+      html += `
+
+        <div class="signal">
+
+          <div class="signal-top">
+
+            <div class="signal-title">
+              ${escapeHtml(
+                signal.title
+              )}
+            </div>
+
+            <div class="signal-value">
+              ${formatNumber(
+                signal.value
+              )}
+            </div>
+
+          </div>
+
+          <div class="signal-description">
+
+            ${escapeHtml(
+              signal.description || ''
+            )}
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+  );
+
+
+  if (
+    alerts.length
+  ) {
+
+    html += `
+
+      <div
+        class="section-title"
+        style="
+          margin-top:18px;
+          margin-right:0;
+        "
+      >
+        هشدارهای عملیاتی
+      </div>
+
+    `;
+
+
+    alerts
+      .slice(0,12)
+      .forEach(
+        function(alert) {
+
+          html += `
+
+            <div
+              class="alert ${
+                alert.severity === 'high'
+                  ? 'high'
+                  : ''
+              }"
+            >
+
+              <div class="alert-icon">
+
+                <i
+                  data-lucide="${
+                    alert.severity === 'high'
+                      ? 'alert-triangle'
+                      : 'alert-circle'
+                  }"
+                ></i>
+
+              </div>
+
+              <div>
+
+                <div class="alert-title">
+
+                  ${escapeHtml(
+                    alert.title || ''
+                  )}
+
+                </div>
+
+                <div class="alert-message">
+
+                  ${escapeHtml(
+                    alert.message || ''
+                  )}
+
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      );
+
+  }
+
+
+  if (
+    !html
+  ) {
+
+    html = `
+
+      <div
+        style="
+          padding:30px;
+          text-align:center;
+          color:var(--muted);
+          font-size:11px;
+        "
+      >
+        سیگنال یا هشدار قابل نمایش وجود ندارد.
+      </div>
+
+    `;
+
+  }
+
+
+  container.innerHTML =
+    html;
+
+
+  lucide.createIcons();
+
+}
+
+
+/* =========================================================
+   CHARTS
+   ========================================================= */
+
+function renderCharts(
+  analytics
+) {
+
+  renderChart(
+    'projectStatusChart',
+    analytics.projectStatus
+  );
+
+
+  renderChart(
+    'projectCategoryChart',
+    analytics.projectCategory
+  );
+
+
+  renderChart(
+    'infrastructureChart',
+    analytics.infrastructure
+  );
+
+}
+
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+function renderChart(
+  canvasId,
+  config
+) {
+
+  const canvas =
+    document.getElementById(
+      canvasId
+    );
+
+
+  if (
+    STATE.charts[canvasId]
+  ) {
+
+    STATE.charts[
+      canvasId
+    ].destroy();
+
+  }
+
+
+  if (
+    !config
+  ) {
+    return;
+  }
+
+
+  STATE.charts[
+    canvasId
+  ] =
+    new Chart(
+      canvas,
+      {
+
+        type:
+          config.type ||
+          'bar',
+
+        data: {
+
+          labels:
+            config.labels || [],
+
+          datasets:
+            (config.datasets || [])
+              .map(
+                function(dataset) {
+
+                  return {
+
+                    label:
+                      dataset.label,
+
+                    data:
+                      dataset.data,
+
+                    borderWidth:
+                      1,
+
+                    borderRadius:
+                      7,
+
+                    backgroundColor:
+                      'rgba(54,163,255,.45)',
+
+                    borderColor:
+                      '#36a3ff'
+
+                  };
+
+                }
+              )
+        },
+
+        options: {
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false,
+
+          plugins: {
+
+            legend: {
+
+              display:
+                true,
+
+              labels: {
+
+                color:
+                  '#8da1b8',
+
+                font: {
+
+                  family:
+                    'Vazirmatn',
+
+                  size:
+                    10
+                }
+              }
+            }
+
+          },
+
+          scales: {
+
+            x: {
+
+              ticks: {
+
+                color:
+                  '#8da1b8',
+
+                font: {
+
+                  family:
+                    'Vazirmatn',
+
+                  size:
+                    9
+                }
+              },
+
+              grid: {
+
+                color:
+                  'rgba(255,255,255,.035)'
+              }
+            },
+
+            y: {
+
+              ticks: {
+
+                color:
+                  '#8da1b8',
+
+                font: {
+
+                  family:
+                    'Vazirmatn',
+
+                  size:
+                    9
+                }
+              },
+
+              grid: {
+
+                color:
+                  'rgba(255,255,255,.035)'
+              }
+            }
+
+          }
+
+        }
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   RECORD TABLE
+   ========================================================= */
+
+function renderRecordsTable(
+  records
+) {
+
+  const rows = [];
+
+
+  [
+    'projects',
+    'zones',
+    'infrastructure',
+    'population',
+    'indicators'
+  ]
+  .forEach(
+    function(type) {
+
+      const list =
+        records[type] || [];
+
+
+      list
+        .slice(0,30)
+        .forEach(
+          function(record) {
+
+            rows.push({
+
+              type:
+                type,
+
+              record:
+                record
+
+            });
+
+          }
+        );
+
+    }
+  );
+
+
+  const tbody =
+    document.getElementById(
+      'recordsTable'
+    );
+
+
+  tbody.innerHTML =
+    rows.map(
+      function(item) {
+
+        const record =
+          item.record;
+
+
+        const title =
+          record.projectName ||
+          record.zoneName ||
+          record.facilityName ||
+          record.recordName ||
+          record.indicatorName ||
+          'بدون عنوان';
+
+
+        const id =
+          record.projectId ||
+          record.zoneId ||
+          record.infrastructureId ||
+          record.populationId ||
+          record.indicatorId ||
+          record.recordId ||
+          '';
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                typeLabel(
+                  item.type
+                )
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                title
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                record.districtName ||
+                '—'
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                record.dehestanName ||
+                '—'
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                record.projectStatus ||
+                record.status ||
+                record.operationalStatus ||
+                record.developmentStatus ||
+                '—'
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                record.projectPriority ||
+                record.priority ||
+                record.developmentPriority ||
+                record.infrastructurePriority ||
+                '—'
+              )}
+            </td>
+
+            <td>
+
+              <button
+                class="profile-btn"
+                onclick="openTableProfile(
+                  '${escapeAttribute(id)}',
+                  '${escapeAttribute(
+                    item.type
+                  )}'
+                )"
+              >
+
+                مشاهده شناسنامه
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    )
+    .join('');
+
+
+  document
+    .getElementById(
+      'tableCount'
+    )
+    .textContent =
+      formatNumber(
+        rows.length
+      ) +
+      ' رکورد';
+
+}
+
+
+/* =========================================================
+   TABLE PROFILE
+   ========================================================= */
+
+function openTableProfile(
+  id,
+  type
+) {
+
+  const map = {
+
+    projects:
+      'project',
+
+    zones:
+      'zone',
+
+    infrastructure:
+      'infrastructure',
+
+    population:
+      'population',
+
+    indicators:
+      'indicators'
+
+  };
+
+
+  const apiType =
+    map[type] ||
+    type;
+
+
+  const records =
+    STATE.data &&
+    STATE.data.records
+      ? STATE.data.records[type]
+      : [];
+
+
+  const record =
+    (records || [])
+      .find(
+        function(item) {
+
+          return String(
+            item.projectId ||
+            item.zoneId ||
+            item.infrastructureId ||
+            item.populationId ||
+            item.indicatorId ||
+            item.recordId ||
+            ''
+          ) ===
+          String(id);
+
+        }
+      );
+
+
+  if (record) {
+
+    openProfile(
+      record,
+      apiType
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+function openProfile(
+  record,
+  type
+) {
+
+  STATE.currentRecord =
+    record;
+
+
+  document
+    .getElementById(
+      'profileDrawer'
+    )
+    .classList
+    .add('open');
+
+
+  const title =
+    record.projectName ||
+    record.zoneName ||
+    record.facilityName ||
+    record.recordName ||
+    record.indicatorName ||
+    record.documentTitle ||
+    'شناسنامه';
+
+
+  document
+    .getElementById(
+      'drawerSubtitle'
+    )
+    .textContent =
+      title;
+
+
+  const body =
+    document.getElementById(
+      'drawerBody'
+    );
+
+
+  body.innerHTML =
+    buildProfileHtml(
+      record
+    );
+
+
+  lucide.createIcons();
+
+}
+
+
+/* =========================================================
+   PROFILE HTML
+   ========================================================= */
+
+function buildProfileHtml(
+  record
+) {
+
+  const entries =
+    Object.keys(record)
+      .filter(
+        function(key) {
+
+          return (
+            record[key] !== '' &&
+            record[key] !== null &&
+            record[key] !== undefined
+          );
+
+        }
+      );
+
+
+  const sections = {
+
+    identity: [
+      'projectId',
+      'projectCode',
+      'projectName',
+      'zoneId',
+      'zoneCode',
+      'zoneName',
+      'recordId',
+      'recordCode',
+      'recordName',
+      'facilityName',
+      'indicatorId',
+      'indicatorName'
+    ],
+
+    location: [
+      'districtName',
+      'dehestanName',
+      'villageName',
+      'nomadicName',
+      'latitude',
+      'longitude',
+      'locationDescription',
+      'area',
+      'areaUnit'
+    ],
+
+    status: [
+      'projectStatus',
+      'status',
+      'operationalStatus',
+      'developmentStatus',
+      'projectPriority',
+      'priority',
+      'developmentPriority',
+      'infrastructurePriority'
+    ],
+
+    project: [
+      'projectCategory',
+      'projectSubCategory',
+      'projectSummary',
+      'projectDescription',
+      'implementer',
+      'implementerType',
+      'startDate',
+      'endDate',
+      'budget',
+      'budgetCurrency',
+      'beneficiaryCount',
+      'projectOutput',
+      'projectOutcome',
+      'socialImpact'
+    ],
+
+    infrastructure: [
+      'infrastructureType',
+      'infrastructureCategory',
+      'infrastructureSubCategory',
+      'capacity',
+      'capacityUnit',
+      'currentLoad',
+      'conditionStatus',
+      'waterAvailability',
+      'electricityAvailability',
+      'gasAvailability',
+      'mobileCoverage',
+      'internetAvailability',
+      'internetQuality',
+      'infrastructureGap'
+    ],
+
+    population: [
+      'population',
+      'households',
+      'malePopulation',
+      'femalePopulation',
+      'populationYear',
+      'populationDensity',
+      'dependencyRatio',
+      'averageHouseholdSize',
+      'literacyRate',
+      'employmentRate',
+      'unemploymentRate',
+      'vulnerablePopulation'
+    ],
+
+    documents: [
+      'iframeUrl',
+      'documentUrl',
+      'sourceUrl',
+      'fileUrl',
+      'fileId',
+      'fileName'
+    ]
+  };
+
+
+  let html =
+    '';
+
+
+  Object.keys(
+    sections
+  )
+  .forEach(
+    function(sectionName) {
+
+      const keys =
+        sections[sectionName]
+          .filter(
+            function(key) {
+
+              return (
+                entries.indexOf(key) !== -1
+              );
+
+            }
+          );
+
+
+      if (!keys.length) {
+        return;
+      }
+
+
+      html += `
+
+        <div class="profile-section">
+
+          <div class="profile-section-title">
+
+            ${
+              sectionTitle(
+                sectionName
+              )
+            }
+
+          </div>
+
+          <div class="profile-grid">
+
+            ${
+              keys.map(
+                function(key) {
+
+                  return profileField(
+                    key,
+                    record[key]
+                  );
+
+                }
+              )
+              .join('')
+            }
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+  );
+
+
+  const remaining =
+    entries.filter(
+      function(key) {
+
+        return !Object.keys(
+          sections
+        )
+        .some(
+          function(sectionName) {
+
+            return sections[
+              sectionName
+            ].indexOf(key) !== -1;
+
+          }
+        );
+
+      }
+    );
+
+
+  if (
+    remaining.length
+  ) {
+
+    html += `
+
+      <div class="profile-section">
+
+        <div class="profile-section-title">
+          سایر اطلاعات
+        </div>
+
+        <div class="profile-grid">
+
+          ${
+            remaining
+              .map(
+                function(key) {
+
+                  return profileField(
+                    key,
+                    record[key]
+                  );
+
+                }
+              )
+              .join('')
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  return html;
+
+}
+
+
+/* =========================================================
+   PROFILE FIELD
+   ========================================================= */
+
+function profileField(
+  key,
+  value
+) {
+
+  let display =
+    value;
+
+
+  if (
+    typeof value === 'object' &&
+    value !== null
+  ) {
+
+    try {
+
+      display =
+        JSON.stringify(
+          value,
+          null,
+          2
+        );
+
+    } catch (error) {
+
+      display =
+        String(value);
+
+    }
+
+  }
+
+
+  if (
+    typeof display === 'string' &&
+    display.startsWith('http')
+  ) {
+
+    display =
+      `
+        <a
+          href="${escapeAttribute(display)}"
+          target="_blank"
+          rel="noopener"
+          style="
+            color:var(--primary);
+          "
+        >
+          مشاهده
+        </a>
+      `;
+
+  } else {
+
+    display =
+      escapeHtml(
+        String(display)
+      );
+
+  }
+
+
+  return `
+
+    <div class="profile-field">
+
+      <div class="profile-key">
+
+        ${escapeHtml(
+          fieldLabel(
+            key
+          )
+        )}
+
+      </div>
+
+      <div class="profile-value">
+
+        ${display}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CLOSE PROFILE
+   ========================================================= */
+
+function closeProfile() {
+
+  document
+    .getElementById(
+      'profileDrawer'
+    )
+    .classList
+    .remove('open');
+
+}
+
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+function fieldLabel(
+  key
+) {
+
+  const labels = {
+
+    projectId:
+      'شناسه پروژه',
+
+    projectCode:
+      'کد پروژه',
+
+    projectName:
+      'نام پروژه',
+
+    zoneId:
+      'شناسه منطقه',
+
+    zoneCode:
+      'کد منطقه',
+
+    zoneName:
+      'نام منطقه',
+
+    districtName:
+      'شهرستان',
+
+    dehestanName:
+      'دهستان',
+
+    villageName:
+      'روستا',
+
+    nomadicName:
+      'جامعه عشایری',
+
+    latitude:
+      'عرض جغرافیایی',
+
+    longitude:
+      'طول جغرافیایی',
+
+    projectStatus:
+      'وضعیت پروژه',
+
+    status:
+      'وضعیت',
+
+    projectPriority:
+      'اولویت پروژه',
+
+    priority:
+      'اولویت',
+
+    projectCategory:
+      'دسته پروژه',
+
+    projectSummary:
+      'خلاصه پروژه',
+
+    projectDescription:
+      'شرح پروژه',
+
+    implementer:
+      'مجری',
+
+    startDate:
+      'تاریخ شروع',
+
+    endDate:
+      'تاریخ پایان',
+
+    budget:
+      'بودجه',
+
+    budgetCurrency:
+      'واحد پول',
+
+    beneficiaryCount:
+      'تعداد ذی‌نفعان',
+
+    infrastructureType:
+      'نوع زیرساخت',
+
+    capacity:
+      'ظرفیت',
+
+    conditionStatus:
+      'وضعیت فنی',
+
+    infrastructureGap:
+      'شکاف زیرساختی',
+
+    population:
+      'جمعیت',
+
+    households:
+      'خانوار',
+
+    malePopulation:
+      'جمعیت مرد',
+
+    femalePopulation:
+      'جمعیت زن',
+
+    populationYear:
+      'سال جمعیت',
+
+    populationDensity:
+      'تراکم جمعیت',
+
+    employmentRate:
+      'نرخ اشتغال',
+
+    unemploymentRate:
+      'نرخ بیکاری',
+
+    vulnerablePopulation:
+      'جمعیت آسیب‌پذیر',
+
+    documentUrl:
+      'سند',
+
+    iframeUrl:
+      'نمایش سند',
+
+    sourceUrl:
+      'منبع',
+
+    fileUrl:
+      'فایل',
+
+    fileName:
+      'نام فایل'
+
+  };
+
+
+  return (
+    labels[key] ||
+    key
+  );
+
+}
+
+
+function sectionTitle(
+  section
+) {
+
+  const titles = {
+
+    identity:
+      'هویت',
+
+    location:
+      'موقعیت جغرافیایی',
+
+    status:
+      'وضعیت و اولویت',
+
+    project:
+      'اطلاعات پروژه',
+
+    infrastructure:
+      'اطلاعات زیرساخت',
+
+    population:
+      'اطلاعات جمعیتی',
+
+    documents:
+      'اسناد و منابع'
+
+  };
+
+
+  return (
+    titles[section] ||
+    section
+  );
+
+}
+
+
+/* =========================================================
+   TYPE LABEL
+   ========================================================= */
+
+function typeLabel(
+  type
+) {
+
+  const labels = {
+
+    projects:
+      'پروژه',
+
+    zones:
+      'منطقه',
+
+    infrastructure:
+      'زیرساخت',
+
+    population:
+      'جمعیت',
+
+    indicators:
+      'شاخص',
+
+    project:
+      'پروژه',
+
+    zone:
+      'منطقه'
+
+  };
+
+
+  return (
+    labels[type] ||
+    type
+  );
+
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+function showLoading(
+  message
+) {
+
+  document
+    .getElementById(
+      'loading'
+    )
+    .classList
+    .remove('hidden');
+
+
+  document
+    .getElementById(
+      'loadingText'
+    )
+    .textContent =
+      message ||
+      'در حال دریافت اطلاعات...';
+
+}
+
+
+function hideLoading() {
+
+  document
+    .getElementById(
+      'loading'
+    )
+    .classList
+    .add('hidden');
+
+}
+
+
+/* =========================================================
+   CONNECTION
+   ========================================================= */
+
+function setConnection(
+  online
+) {
+
+  const element =
+    document.getElementById(
+      'connectionStatus'
+    );
+
+
+  if (online) {
+
+    element.textContent =
+      'اتصال برقرار است';
+
+  } else {
+
+    element.textContent =
+      'خطا در اتصال';
+
+  }
+
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+function showError(
+  message
+) {
+
+  const container =
+    document.getElementById(
+      'intelligenceBody'
+    );
+
+
+  container.innerHTML = `
+
+    <div
+      style="
+        padding:30px;
+        text-align:center;
+        color:var(--red);
+      "
+    >
+
+      <i
+        data-lucide="alert-triangle"
+        style="
+          width:35px;
+          height:35px;
+          margin-bottom:10px;
+        "
+      ></i>
+
+      <div>
+        خطا در دریافت اطلاعات
+      </div>
+
+      <div
+        style="
+          color:var(--muted);
+          font-size:10px;
+          margin-top:7px;
+        "
+      >
+        ${escapeHtml(
+          message
+        )}
+      </div>
+
+    </div>
+
+  `;
+
+
+  lucide.createIcons();
+
+}
+
+
+/* =========================================================
+   NUMBER
+   ========================================================= */
+
+function formatNumber(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ''
+  ) {
+
+    return '0';
+
+  }
+
+
+  const number =
+    Number(value);
+
+
+  if (
+    Number.isNaN(number)
+  ) {
+
+    return escapeHtml(
+      String(value)
+    );
+
+  }
+
+
+  return new Intl.NumberFormat(
+    'fa-IR'
+  )
+  .format(
+    number
+  );
+
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+function formatDateTime(
+  value
+) {
+
+  if (!value) {
+    return '—';
+  }
+
+
+  try {
+
+    return new Intl.DateTimeFormat(
+      'fa-IR',
+      {
+        dateStyle:
+          'medium',
+
+        timeStyle:
+          'short'
+      }
+    )
+    .format(
+      new Date(value)
+    );
+
+  } catch (error) {
+
+    return String(value);
+
+  }
+
+}
+
+
+/* =========================================================
+   ESCAPE
+   ========================================================= */
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value ?? ''
+  )
+  .replace(
+    /&/g,
+    '&amp;'
+  )
+  .replace(
+    /</g,
+    '&lt;'
+  )
+  .replace(
+    />/g,
+    '&gt;'
+  )
+  .replace(
+    /"/g,
+    '&quot;'
+  )
+  .replace(
+    /'/g,
+    '&#039;'
+  );
+
+}
+
+
+function escapeAttribute(
+  value
+) {
+
+  return escapeHtml(
+    value
+  )
+  .replace(
+    /`/g,
+    '&#096;'
+  );
+
+}
+
+
+/* =========================================================
+   REFRESH TIMER
+   ========================================================= */
+
+if (
+  CONFIG.refreshInterval > 0
+) {
+
+  setInterval(
+    function() {
+
+      loadDashboard();
+
+    },
+    CONFIG.refreshInterval
+  );
+
+}
+
+</script>
+
+</body>
+</html>
